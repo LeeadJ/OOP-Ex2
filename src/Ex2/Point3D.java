@@ -44,5 +44,9 @@ public class Point3D implements GeoLocation {
         return Math.sqrt(x_pow+y_pow+z_pow);
     }
 
+    public String toString(){
+        return "("+this._x+", "+this._y+", "+this._z+")";
+    }
+
 
 }

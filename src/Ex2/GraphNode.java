@@ -71,4 +71,8 @@ public class GraphNode implements NodeData {
     public void setTag(int t) {
         this.tag = t;
     }
+
+    public String toString(){
+        return "Key: "+this.key+".\nLocation: "+this.location.toString()+".";
+    }
 }
