@@ -63,10 +63,10 @@ public class DWG implements DirectedWeightedGraph {
     public NodeData removeNode(int key) {
         NodeData temp = new GNode(this.nodeMap.get(key).getKey(), this.nodeMap.get(key).getLocation());
         this.nodeMap.remove(key);
-        for(NodeData g : this.nodeMap.values()){
-            for(Edge e : g.edgeMap.values()){
+        for(HashMap<Integer, EdgeData> map : this.edgeMap.values()){
+            for(EdgeData e : map.values()){
                 if(e.getDest() == key){
-                    g.edgeMap.remove(key);
+                    map.remove(key);
                 }
             }
         }
@@ -76,12 +76,14 @@ public class DWG implements DirectedWeightedGraph {
 
     @Override
     public EdgeData removeEdge(int src, int dest) {
-        return null;
+        EdgeData temp = new Edge(src, this.edgeMap.get(src).get(dest).getWeight(), dest);
+        this.edgeMap.get(src).remove(dest);
+        return temp;
     }
 
     @Override
     public int nodeSize() {
-        return 0;
+        return this.nodeMap.size();
     }
 
     @Override
