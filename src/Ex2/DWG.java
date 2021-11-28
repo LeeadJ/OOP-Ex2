@@ -10,17 +10,20 @@ import java.util.List;
 import java.util.Map;
 
 public class DWG implements DirectedWeightedGraph {
-    private Map<DWG, List<NodeEdge> > map = new HashMap<>();
+    public HashMap<Integer, GraphNode> nodeMap = new HashMap<>();
 
+    public DWG(GraphNode a, NodeEdge e, GraphNode b){
+        
+    }
 
     @Override
     public NodeData getNode(int key) {
-        return null;
+        return this.nodeMap.get(key);
     }
 
     @Override
     public EdgeData getEdge(int src, int dest) {
-        return null;
+        return this.nodeMap.get(src).edgeMap.get(dest);
     }
 
     @Override
