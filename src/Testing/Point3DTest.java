@@ -37,6 +37,7 @@ class Point3DTest {
         assertEquals(distance, a.distance(b));
     }
 
+    /** This Tests the toString function. */
     @Test
     void toString_Test() {
         assertEquals(a.toString(), "(0.0, 1.0, 2.0)");

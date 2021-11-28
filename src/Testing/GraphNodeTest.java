@@ -135,4 +135,12 @@ class GraphNodeTest {
         a.edgeMap.put(a.getKey(), e1);
         assertEquals(a.edgeMap.get(0),e1);
     }
+
+    /** This Tests the toString function. */
+    @Test
+    void toString_Test(){
+        assertEquals(a.toString(), "Key: 0.\nLocation: (35.19589389346247, 32.10152879327731, 0.0).");
+    }
+
+
 }

@@ -55,6 +55,7 @@ class NodeEdgeTest {
         assertEquals(e1.getTag(), 99);
     }
 
+    /** This Tests the toString function. */
     @Test
     void toString_Test(){
         assertEquals(e1.toString(), "Src: 0.\nWeight: 1.3118716362419698.\nDest: 16.");
