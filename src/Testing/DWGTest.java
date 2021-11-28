@@ -8,6 +8,8 @@ import api.EdgeData;
 import api.NodeData;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Type;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class DWGTest {
@@ -30,15 +32,13 @@ class DWGTest {
     EdgeData e4 = new Edge(4,5.3, 1);
     EdgeData e5 = new Edge(3,2.4, 2);
 
-    DWG Graph_test = new DWG();
+    DWG dwg = new DWG();
 
     @Test
     void getNode() {
-        Graph_test.addNode(a);
-        Graph_test.addNode(b);
-        Graph_test.addNode(c);
-        Graph_test.addNode(d);
-        Graph_test.addNode(e);
+
+
+
     }
 
     @Test
@@ -51,6 +51,11 @@ class DWGTest {
 
     @Test
     void connect() {
+        assertEquals(0, dwg.edgeSize());
+        dwg.addNode(a);
+        dwg.addNode(c);
+        dwg.connect(a.getKey(), c.getKey(), 1.0);
+        assertEquals(1, dwg.edgeSize());
     }
 
     @Test
@@ -67,21 +72,57 @@ class DWGTest {
 
     @Test
     void removeNode() {
+        assertEquals(0, dwg.nodeSize());
+        dwg.addNode(a);
+        assertEquals(dwg.getNode(a.getKey()), a);
+        dwg.removeNode(a.getKey());
+        assertEquals(0, dwg.nodeSize());
+        assertNull(dwg.getNode(a.getKey()));
     }
 
     @Test
     void removeEdge() {
+        assertEquals(0, dwg.edgeSize());
+        dwg.addNode(a);
+        dwg.addNode(c);
+        dwg.connect(a.getKey(), c.getKey(), 1.0);
+        assertEquals(1, dwg.edgeSize());
+        dwg.removeEdge(a.getKey(), c.getKey());
+        assertEquals(0, dwg.edgeSize());
+
     }
 
     @Test
     void nodeSize() {
+        assertEquals(dwg.nodeSize(), 0);
+        dwg.addNode(a);
+        dwg.addNode(c);
+        assertEquals(dwg.nodeSize(), 2);
+        dwg.removeNode(a.getKey());
+        assertEquals(dwg.nodeSize(), 1);
     }
 
     @Test
     void edgeSize() {
+        assertEquals(0, dwg.edgeSize());
+        dwg.addNode(a);
+        dwg.addNode(c);
+        dwg.connect(a.getKey(), c.getKey(), 1.278647826423);
+        assertEquals(1, dwg.edgeSize());
     }
 
     @Test
     void getMC() {
+        assertEquals(0, dwg.getMC());
+        dwg.addNode(a);
+        assertEquals(1, dwg.getMC());
+        dwg.removeNode(a.getKey());
+        assertEquals(2, dwg.getMC());
+        dwg.addNode(a);
+        dwg.addNode(c);
+        dwg.connect(a.getKey(), c.getKey(), 2.0);
+        assertEquals(5, dwg.getMC());
+        dwg.removeEdge(0, 2);
+        assertEquals(6, dwg.getMC());
     }
 }
