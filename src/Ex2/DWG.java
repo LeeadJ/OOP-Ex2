@@ -11,6 +11,7 @@ import java.util.Map;
 public class DWG implements DirectedWeightedGraph {
     public HashMap<Integer, NodeData> nodeMap;
     public HashMap<Integer, HashMap<Integer, EdgeData>> edgeMap;
+    int MC = 0;
 
     public DWG(){
         this.nodeMap = new HashMap<>();
@@ -31,6 +32,7 @@ public class DWG implements DirectedWeightedGraph {
     @Override
     public void addNode(NodeData n) {
         this.nodeMap.put(n.getKey(), n);
+        this.MC ++;
 
     }
 
@@ -38,6 +40,7 @@ public class DWG implements DirectedWeightedGraph {
     public void connect(int src, int dest, double w) {
         EdgeData temp = new Edge(src, w, dest);
         this.edgeMap.get(src).put(dest, temp);
+        this.MC++;
     }
     //////////////////////////////////ADD EXCEPTIONS///////////////////////////////////////////////////
 
@@ -71,7 +74,7 @@ public class DWG implements DirectedWeightedGraph {
                 }
             }
         }
-
+        this.MC++;
         return temp;
     }
 
@@ -79,6 +82,7 @@ public class DWG implements DirectedWeightedGraph {
     public EdgeData removeEdge(int src, int dest) {
         EdgeData temp = new Edge(src, this.edgeMap.get(src).get(dest).getWeight(), dest);
         this.edgeMap.get(src).remove(dest);
+        this.MC++;
         return temp;
     }
 
@@ -97,6 +101,6 @@ public class DWG implements DirectedWeightedGraph {
 
     @Override
     public int getMC() {
-        return 0;
+        return this.MC;
     }
 }
