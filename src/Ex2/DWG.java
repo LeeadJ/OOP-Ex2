@@ -32,15 +32,23 @@ public class DWG implements DirectedWeightedGraph {
     @Override
     public void addNode(NodeData n) {
         this.nodeMap.put(n.getKey(), n);
+        HashMap<Integer, EdgeData> map = new HashMap<>();
+        this.edgeMap.put(n.getKey(), map);
         this.MC ++;
 
     }
 
     @Override
     public void connect(int src, int dest, double w) {
-        EdgeData temp = new Edge(src, w, dest);
-        this.edgeMap.get(src).put(dest, temp);
-        this.MC++;
+        try{
+            EdgeData temp = new Edge(src, w, dest);
+            this.edgeMap.get(src).put(dest, temp);
+            this.MC++;
+        }
+        catch (NullPointerException e){
+            System.out.println("The Map doesn't contain the src node!");
+        }
+
     }
     //////////////////////////////////ADD EXCEPTIONS///////////////////////////////////////////////////
 
