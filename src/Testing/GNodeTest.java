@@ -127,14 +127,6 @@ class GNodeTest {
         assertEquals(10,b.getTag());
     }
 
-    /** testing our hashmap
-     *
-     */
-    @Test
-    void hashtest(){
-        a.edgeMap.put(a.getKey(), e1);
-        assertEquals(a.edgeMap.get(0),e1);
-    }
 
     /** This Tests the toString function. */
     @Test

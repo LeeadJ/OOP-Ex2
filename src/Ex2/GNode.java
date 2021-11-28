@@ -1,5 +1,6 @@
 package Ex2;
 
+import api.EdgeData;
 import api.GeoLocation;
 import api.NodeData;
 
@@ -11,9 +12,9 @@ public class GNode implements NodeData {
     private double weight;
     private String info;
     private int tag;
-    public HashMap<Integer, Edge> edgeMap = new HashMap<>();
 
-    // contructor for GraphNode
+
+    // constructor for GraphNode
     public GNode(int key, GeoLocation g){
         this.key = key;
         this.location = g;
@@ -26,9 +27,7 @@ public class GNode implements NodeData {
         this.weight = other.getWeight();
         this.info = other.getInfo();
         this.tag = other.getTag();
-        for(int key : other.edgeMap.keySet()){
-            this.edgeMap.put(key,other.edgeMap.get(key));
-        }
+
     }
 
 

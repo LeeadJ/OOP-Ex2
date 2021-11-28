@@ -9,10 +9,12 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class DWG implements DirectedWeightedGraph {
-    public HashMap<Integer, GNode> nodeMap = new HashMap<>();
+    public HashMap<Integer, NodeData> nodeMap;
+    public HashMap<Integer, HashMap<Integer, EdgeData>> edgeMap;
 
     public DWG(){
         this.nodeMap = new HashMap<>();
+        this.edgeMap = new HashMap<>();
     }
 
 
@@ -23,30 +25,33 @@ public class DWG implements DirectedWeightedGraph {
 
     @Override
     public EdgeData getEdge(int src, int dest) {
-        return this.nodeMap.get(src).edgeMap.get(dest);
+        return this.edgeMap.get(src).get(dest);
     }
 
     @Override
     public void addNode(NodeData n) {
-        GNode temp = new GNode(n.getKey(), n.getLocation());
-        this.nodeMap.put(temp.getKey(), temp);
+        this.nodeMap.put(n.getKey(), n);
 
     }
 
     @Override
     public void connect(int src, int dest, double w) {
-        Edge temp = new Edge(src, w, dest);
-        this.nodeMap.get(src).edgeMap.put(dest, temp);
+        EdgeData temp = new Edge(src, w, dest);
+        this.edgeMap.get(src).put(dest, temp);
     }
+    //////////////////////////////////ADD EXCEPTIONS///////////////////////////////////////////////////
 
     @Override
     public Iterator<NodeData> nodeIter() {
-        return null;
+        return this.nodeMap.values().iterator();
     }
 
     @Override
     public Iterator<EdgeData> edgeIter() {
-        return null;
+        HashMap<Integer, EdgeData> new_map = new HashMap<>();
+        for(HashMap<Integer, EdgeData> map : edgeMap.values()){
+
+        }
     }
 
     @Override
@@ -56,9 +61,9 @@ public class DWG implements DirectedWeightedGraph {
 
     @Override
     public NodeData removeNode(int key) {
-        GNode temp = new GNode(this.nodeMap.get(key).getKey(), this.nodeMap.get(key).getLocation());
+        NodeData temp = new GNode(this.nodeMap.get(key).getKey(), this.nodeMap.get(key).getLocation());
         this.nodeMap.remove(key);
-        for(GNode g : this.nodeMap.values()){
+        for(NodeData g : this.nodeMap.values()){
             for(Edge e : g.edgeMap.values()){
                 if(e.getDest() == key){
                     g.edgeMap.remove(key);
