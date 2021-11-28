@@ -6,6 +6,7 @@ import api.NodeData;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class DWG implements DirectedWeightedGraph {
     public HashMap<Integer, GNode> nodeMap = new HashMap<>();
@@ -35,7 +36,7 @@ public class DWG implements DirectedWeightedGraph {
     @Override
     public void connect(int src, int dest, double w) {
         Edge temp = new Edge(src, w, dest);
-
+        this.nodeMap.get(src).edgeMap.put(dest, temp);
     }
 
     @Override
@@ -55,7 +56,17 @@ public class DWG implements DirectedWeightedGraph {
 
     @Override
     public NodeData removeNode(int key) {
-        return null;
+        GNode temp = new GNode(this.nodeMap.get(key).getKey(), this.nodeMap.get(key).getLocation());
+        this.nodeMap.remove(key);
+        for(GNode g : this.nodeMap.values()){
+            for(Edge e : g.edgeMap.values()){
+                if(e.getDest() == key){
+                    g.edgeMap.remove(key);
+                }
+            }
+        }
+
+        return temp;
     }
 
     @Override
