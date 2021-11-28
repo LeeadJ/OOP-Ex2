@@ -49,38 +49,46 @@ public class DWG implements DirectedWeightedGraph {
     @Override
     public Iterator<EdgeData> edgeIter() {
         HashMap<Integer, EdgeData> new_map = new HashMap<>();
-        for(HashMap<Integer, EdgeData> map : this.edgeMap.values())
-            for(EdgeData edge : map.values())
-                new_map.put(edge.getDest(), edge);
-        return new_map.values().iterator();
+        for(HashMap<Integer, EdgeData> map : edgeMap.values()){
+
+        }
     }
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
-        return this.edgeMap.get(node_id).values().iterator();
+        return null;
     }
 
     @Override
     public NodeData removeNode(int key) {
-        return null;
+        NodeData temp = new GNode(this.nodeMap.get(key).getKey(), this.nodeMap.get(key).getLocation());
+        this.nodeMap.remove(key);
+        for(HashMap<Integer, EdgeData> map : this.edgeMap.values()){
+            for(EdgeData e : map.values()){
+                if(e.getDest() == key){
+                    map.remove(key);
+                }
+            }
+        }
+
+        return temp;
     }
 
     @Override
     public EdgeData removeEdge(int src, int dest) {
-        return null;
+        EdgeData temp = new Edge(src, this.edgeMap.get(src).get(dest).getWeight(), dest);
+        this.edgeMap.get(src).remove(dest);
+        return temp;
     }
 
     @Override
     public int nodeSize() {
-        return 0;
+        return this.nodeMap.size();
     }
 
     @Override
     public int edgeSize() {
-        int counter = 0;
-        for(HashMap<Integer, EdgeData> map : this.edgeMap.values())
-            counter += map.size();
-        return counter;
+        return 0;
     }
 
     @Override
