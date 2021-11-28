@@ -19,6 +19,18 @@ public class GNode implements NodeData {
         this.location = g;
     }
 
+    // copy constructor
+    public GNode(GNode other){
+        this.key = other.getKey();
+        this.location = other.getLocation();
+        this.weight = other.getWeight();
+        this.info = other.getInfo();
+        this.tag = other.getTag();
+        for(int key : other.edgeMap.keySet()){
+            this.edgeMap.put(key,other.edgeMap.get(key));
+        }
+    }
+
 
     @Override
     public int getKey() {
