@@ -1,7 +1,7 @@
 package Testing;
 
 
-import Ex2.GraphNode;
+import Ex2.GNode;
 import Ex2.Edge;
 import Ex2.Point3D;
 import org.junit.jupiter.api.Assertions;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GraphNodeTest {
+class GNodeTest {
     /**
      * building Nodes and running tests on the GraphNode Class
      */
@@ -24,11 +24,11 @@ class GraphNodeTest {
     Point3D p9 = new Point3D(10, 11, 12);
 
 
-    GraphNode a = new GraphNode(0, p1);
-    GraphNode b = new GraphNode(1, p2);
-    GraphNode c = new GraphNode(2, p3);
-    GraphNode d = new GraphNode(3, p4);
-    GraphNode e = new GraphNode(4, p5);
+    GNode a = new GNode(0, p1);
+    GNode b = new GNode(1, p2);
+    GNode c = new GNode(2, p3);
+    GNode d = new GNode(3, p4);
+    GNode e = new GNode(4, p5);
 
     Edge e1 = new Edge(0,1.3118716362419698, 16);
 

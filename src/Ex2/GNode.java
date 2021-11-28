@@ -5,7 +5,7 @@ import api.NodeData;
 
 import java.util.HashMap;
 
-public class GraphNode implements NodeData {
+public class GNode implements NodeData {
     private final int key;
     private GeoLocation location;
     private double weight;
@@ -14,7 +14,7 @@ public class GraphNode implements NodeData {
     public HashMap<Integer, Edge> edgeMap = new HashMap<>();
 
     // contructor for GraphNode
-    public GraphNode(int key, GeoLocation g){
+    public GNode(int key, GeoLocation g){
         this.key = key;
         this.location = g;
     }
