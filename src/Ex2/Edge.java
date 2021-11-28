@@ -2,7 +2,7 @@ package Ex2;
 
 import api.EdgeData;
 
-public class NodeEdge implements EdgeData {
+public class Edge implements EdgeData {
     private final int src;
     private final int dest;
     private final double weight;
@@ -10,7 +10,7 @@ public class NodeEdge implements EdgeData {
     private int tag;
 
     /** Constructors */
-    public NodeEdge(int Src, double Weight, int Dest){
+    public Edge(int Src, double Weight, int Dest){
         this.src = Src;
         this.weight = Weight;
         this. dest = Dest;
@@ -18,7 +18,7 @@ public class NodeEdge implements EdgeData {
 
     }
     // Copy:
-    public NodeEdge(NodeEdge other){
+    public Edge(Edge other){
         this.src = other.src;
         this.weight = other.weight;
         this.dest = other.dest;

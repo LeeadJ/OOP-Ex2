@@ -1,12 +1,12 @@
 package Testing;
 
-import Ex2.NodeEdge;
+import Ex2.Edge;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class NodeEdgeTest {
-    NodeEdge e1 = new NodeEdge(0,1.3118716362419698, 16);
+class EdgeTest {
+    Edge e1 = new Edge(0,1.3118716362419698, 16);
 
     @Test
     void getSrc() {
