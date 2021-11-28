@@ -11,20 +11,13 @@ public class GraphNode implements NodeData {
     private double weight;
     private String info;
     private int tag;
-    public HashMap<Integer, NodeEdge> edgeMap = new HashMap<>();
+    public HashMap<Integer, Edge> edgeMap = new HashMap<>();
 
     // contructor for GraphNode
     public GraphNode(int key, GeoLocation g){
         this.key = key;
         this.location = g;
     }
-
-    // copy constructor
-    public GraphNode(GraphNode other){
-        this.key = other.key;
-        this.location = other.location;
-    }
-
 
 
     @Override
