@@ -2,6 +2,7 @@ package Testing;
 
 
 import Ex2.GraphNode;
+import Ex2.NodeEdge;
 import Ex2.Point3D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,8 @@ class GraphNodeTest {
     GraphNode c = new GraphNode(2, p3);
     GraphNode d = new GraphNode(3, p4);
     GraphNode e = new GraphNode(4, p5);
+
+    NodeEdge e1 = new NodeEdge(0,1.3118716362419698, 16);
 
 
 
@@ -124,8 +127,12 @@ class GraphNodeTest {
         assertEquals(10,b.getTag());
     }
 
+    /** testing our hashmap
+     *
+     */
     @Test
-    void toString_Test(){
-        assertEquals(a.toString(), "Key: 0.\nLocation: (35.19589389346247, 32.10152879327731, 0.0).");
+    void hashtest(){
+        a.edgeMap.put(a.getKey(), e1);
+        assertEquals(a.edgeMap.get(0),e1);
     }
 }

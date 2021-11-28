@@ -3,17 +3,21 @@ package Ex2;
 import api.GeoLocation;
 import api.NodeData;
 
+import java.util.HashMap;
+
 public class GraphNode implements NodeData {
     private final int key;
     private GeoLocation location;
     private double weight;
     private String info;
     private int tag;
+    public HashMap<Integer, NodeEdge> edgeMap = new HashMap<>();
 
     public GraphNode(int key, GeoLocation g){
         this.key = key;
         this.location = g;
     }
+
 
     @Override
     public int getKey() {
