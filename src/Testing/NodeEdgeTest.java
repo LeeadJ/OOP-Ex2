@@ -54,4 +54,9 @@ class NodeEdgeTest {
         assertNotEquals(e1.getTag(), 10);
         assertEquals(e1.getTag(), 99);
     }
+
+    @Test
+    void toString_Test(){
+        assertEquals(e1.toString(), "Src: 0.\nWeight: 1.3118716362419698.\nDest: 16.");
+    }
 }

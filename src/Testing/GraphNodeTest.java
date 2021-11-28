@@ -123,4 +123,9 @@ class GraphNodeTest {
         b.setTag(10);
         assertEquals(10,b.getTag());
     }
+
+    @Test
+    void toString_Test(){
+        assertEquals(a.toString(), "Key: 0.\nLocation: (35.19589389346247, 32.10152879327731, 0.0).");
+    }
 }

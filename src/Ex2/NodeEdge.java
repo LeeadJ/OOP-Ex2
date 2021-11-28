@@ -60,4 +60,8 @@ public class NodeEdge implements EdgeData {
     public void setTag(int t) {
         this.tag = t;
     }
+
+    public String toString(){
+        return "Src: "+this.src+".\nWeight: "+this.weight+".\nDest: "+this.dest+".";
+    }
 }
