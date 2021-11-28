@@ -49,14 +49,15 @@ public class DWG implements DirectedWeightedGraph {
     @Override
     public Iterator<EdgeData> edgeIter() {
         HashMap<Integer, EdgeData> new_map = new HashMap<>();
-        for(HashMap<Integer, EdgeData> map : edgeMap.values()){
-
-        }
+        for(HashMap<Integer, EdgeData> map : this.edgeMap.values())
+            for(EdgeData edge : map.values())
+                new_map.put(edge.getDest(), edge);
+        return new_map.values().iterator();
     }
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
-        return null;
+        return this.edgeMap.get(node_id).values().iterator();
     }
 
     @Override
@@ -88,7 +89,10 @@ public class DWG implements DirectedWeightedGraph {
 
     @Override
     public int edgeSize() {
-        return 0;
+        int counter = 0;
+        for(HashMap<Integer, EdgeData> map : this.edgeMap.values())
+            counter += map.size();
+        return counter;
     }
 
     @Override
