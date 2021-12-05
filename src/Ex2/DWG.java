@@ -35,7 +35,6 @@ public class DWG implements DirectedWeightedGraph {
         HashMap<Integer, EdgeData> map = new HashMap<>();
         this.edgeMap.put(n.getKey(), map);
         this.MC ++;
-
     }
 
     @Override
@@ -48,10 +47,9 @@ public class DWG implements DirectedWeightedGraph {
         catch (NullPointerException e){
             System.out.println("The Map doesn't contain the src node!");
         }
-
     }
-    //////////////////////////////////ADD EXCEPTIONS///////////////////////////////////////////////////
 
+    //////////////////////////////////ADD EXCEPTIONS///////////////////////////////////////////////////
     @Override
     public Iterator<NodeData> nodeIter() {
         return this.nodeMap.values().iterator();
