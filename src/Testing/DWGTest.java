@@ -6,8 +6,14 @@ import Ex2.GNode;
 import Ex2.Point3D;
 import api.EdgeData;
 import api.NodeData;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Type;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,6 +40,19 @@ class DWGTest {
 
     DWG dwg = new DWG();
 
+    @Test
+    /** This tests the DWG JSON file constructor.*/
+    void JSON_constructer() throws IOException, ParseException {
+        JSONParser jsonParser = new JSONParser();
+        //Parsing the contents of the JSON file
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader("G3.json"));
+        DWG my_DWG = new DWG("G3.json");
+        //check that the G3 info was inserted in the maps.
+        assertEquals(48, my_DWG.nodeMap.size());
+        assertEquals(48, my_DWG.edgeMap.size());
+
+
+    }
     @Test
     void getNode() {
         dwg.addNode(a);
