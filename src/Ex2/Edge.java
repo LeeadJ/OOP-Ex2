@@ -1,7 +1,7 @@
 package Ex2;
 
 import api.EdgeData;
-import com.google.gson.Gson;
+
 
 import java.io.Reader;
 import java.nio.file.Files;
@@ -47,7 +47,7 @@ public class Edge implements EdgeData {
     }
 
     @Override
-    public double getW() {
+    public double getWeight() {
         return this.w;
     }
 
