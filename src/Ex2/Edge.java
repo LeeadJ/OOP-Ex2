@@ -1,26 +1,36 @@
 package Ex2;
 
 import api.EdgeData;
+import com.google.gson.Gson;
+
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.Map;
 
 public class Edge implements EdgeData {
     private final int src;
     private final int dest;
-    private final double weight;
+    private final double w;
     private String info;
     private int tag;
 
-    /** Constructors */
-    public Edge(int Src, double Weight, int Dest){
+    /**
+     * Constructors
+     */
+    public Edge(int Src, double w, int Dest) {
         this.src = Src;
-        this.weight = Weight;
-        this. dest = Dest;
+        this.w = w;
+        this.dest = Dest;
 
 
     }
+
     // Copy:
-    public Edge(Edge other){
+    public Edge(Edge other) {
         this.src = other.src;
-        this.weight = other.weight;
+        this.w = other.w;
         this.dest = other.dest;
         this.info = other.info;
         this.tag = other.tag;
@@ -37,8 +47,8 @@ public class Edge implements EdgeData {
     }
 
     @Override
-    public double getWeight() {
-        return this.weight;
+    public double getW() {
+        return this.w;
     }
 
     @Override
@@ -61,7 +71,9 @@ public class Edge implements EdgeData {
         this.tag = t;
     }
 
-    public String toString(){
-        return "Src: "+this.src+".\nWeight: "+this.weight+".\nDest: "+this.dest+".";
+    public String toString() {
+        return "Src: " + this.src + ".\nWeight: " + this.w + ".\nDest: " + this.dest + ".";
     }
 }
+
+
