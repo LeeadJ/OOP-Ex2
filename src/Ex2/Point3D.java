@@ -7,10 +7,18 @@ public class Point3D implements GeoLocation {
     private final double _y;
     private final double _z;
 
+    /** Constructors */
     public Point3D(double x, double y, double z){
         this._x = x;
         this._y = y;
         this._z = z;
+    }
+
+    /** Copy Constructors */
+    public Point3D(Point3D other){
+        this._x = other._x;
+        this._y = other._y;
+        this._z = other._z;
     }
 
     @Override
