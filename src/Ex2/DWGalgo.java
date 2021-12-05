@@ -2,8 +2,10 @@ package Ex2;
 
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
+import api.EdgeData;
 import api.NodeData;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class DWGalgo implements DirectedWeightedGraphAlgorithms {
@@ -23,11 +25,15 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     @Override
     public DirectedWeightedGraph copy() {
         DirectedWeightedGraph copy = new DWG();
-        while(this.graph.nodeIter().hasNext()) {
-            copy.addNode(this.graph.nodeIter().next());
+        Iterator<NodeData> itr_node = this.graph.nodeIter();
+        while(itr_node.hasNext()) {
+            NodeData temp_node = new GNode(itr_node.next());
+            copy.addNode(temp_node);
         }
-        while(this.graph.edgeIter().hasNext()) {
-            copy.connect(this.graph.edgeIter().next().getSrc(), this.graph.edgeIter().next().getDest(), this.graph.edgeIter().next().getW());
+        Iterator<EdgeData> itr_edge = this.graph.edgeIter();
+        while(itr_edge.hasNext()) {
+            EdgeData temp_edge = new Edge(itr_edge.next());
+            copy.connect(temp_edge.getSrc(), temp_edge.getDest(), temp_edge.getWeight());
         }
         return copy;
     }
@@ -37,6 +43,7 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     public boolean isConnected() {
         int nodes = 0;
         while(this.graph.nodeIter().hasNext()){
+            this.graph.nodeIter().next();
             nodes++;
         }
         for(int i = 0; i< nodes; i++){
@@ -51,20 +58,19 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
         }
         return true;
         }
-        // Function to perform DFS traversal on the graph on a graph
-        public static void DFS(DirectedWeightedGraph graph, int v, boolean[] visited)
-        {
-            visited[v] = true;
 
-            // do for every edge (v, u)
-            for (int u: graph.adjList.get(v))
-            {
-                // `u` is not visited
-                if (!visited[u]) {
-                    DFS(graph, u, visited);
+        // Function to perform DFS traversal on the graph on a graph
+        public static void DFS(DirectedWeightedGraph graph, int v, boolean[] visited) {
+            visited[v] = true;
+            Iterator<EdgeData> itr_edge = graph.edgeIter(v);
+            while (itr_edge.hasNext()) {
+                EdgeData temp_edge = new Edge(itr_edge.next());
+                if (!visited[temp_edge.getDest()]) {
+                    DFS(graph, temp_edge.getDest(), visited);
                 }
             }
         }
+
 
 
 
