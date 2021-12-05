@@ -8,8 +8,6 @@ import api.EdgeData;
 import api.NodeData;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Type;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class DWGTest {
@@ -44,11 +42,11 @@ class DWGTest {
     void getEdge() {
         dwg.addNode(a);
         dwg.addNode(c);
-        dwg.connect(a.getKey(), c.getKey(), 1.5);
+        dwg.connect(a.getId(), c.getId(), 1.5);
         EdgeData e1 = new Edge(0,1.5, 2);
-        assertEquals(dwg.edgeMap.get(a.getKey()).get(c.getKey()).getSrc(), e1.getSrc());
-        assertEquals(dwg.edgeMap.get(a.getKey()).get(c.getKey()).getDest(), e1.getDest());
-        assertEquals(dwg.edgeMap.get(a.getKey()).get(c.getKey()).getWeight(), e1.getWeight());
+        assertEquals(dwg.edgeMap.get(a.getId()).get(c.getId()).getSrc(), e1.getSrc());
+        assertEquals(dwg.edgeMap.get(a.getId()).get(c.getId()).getDest(), e1.getDest());
+        assertEquals(dwg.edgeMap.get(a.getId()).get(c.getId()).getW(), e1.getW());
     }
 
     @Test
@@ -63,7 +61,7 @@ class DWGTest {
         assertEquals(0, dwg.edgeSize());
         dwg.addNode(a);
         dwg.addNode(c);
-        dwg.connect(a.getKey(), c.getKey(), 1.0);
+        dwg.connect(a.getId(), c.getId(), 1.0);
         assertEquals(1, dwg.edgeSize());
     }
 
@@ -83,10 +81,10 @@ class DWGTest {
     void removeNode() {
         assertEquals(0, dwg.nodeSize());
         dwg.addNode(a);
-        assertEquals(dwg.getNode(a.getKey()), a);
-        dwg.removeNode(a.getKey());
+        assertEquals(dwg.getNode(a.getId()), a);
+        dwg.removeNode(a.getId());
         assertEquals(0, dwg.nodeSize());
-        assertNull(dwg.getNode(a.getKey()));
+        assertNull(dwg.getNode(a.getId()));
     }
 
     @Test
@@ -94,9 +92,9 @@ class DWGTest {
         assertEquals(0, dwg.edgeSize());
         dwg.addNode(a);
         dwg.addNode(c);
-        dwg.connect(a.getKey(), c.getKey(), 1.0);
+        dwg.connect(a.getId(), c.getId(), 1.0);
         assertEquals(1, dwg.edgeSize());
-        dwg.removeEdge(a.getKey(), c.getKey());
+        dwg.removeEdge(a.getId(), c.getId());
         assertEquals(0, dwg.edgeSize());
 
     }
@@ -107,7 +105,7 @@ class DWGTest {
         dwg.addNode(a);
         dwg.addNode(c);
         assertEquals(dwg.nodeSize(), 2);
-        dwg.removeNode(a.getKey());
+        dwg.removeNode(a.getId());
         assertEquals(dwg.nodeSize(), 1);
     }
 
@@ -116,7 +114,7 @@ class DWGTest {
         assertEquals(0, dwg.edgeSize());
         dwg.addNode(a);
         dwg.addNode(c);
-        dwg.connect(a.getKey(), c.getKey(), 1.278647826423);
+        dwg.connect(a.getId(), c.getId(), 1.278647826423);
         assertEquals(1, dwg.edgeSize());
     }
 
@@ -125,11 +123,11 @@ class DWGTest {
         assertEquals(0, dwg.getMC());
         dwg.addNode(a);
         assertEquals(1, dwg.getMC());
-        dwg.removeNode(a.getKey());
+        dwg.removeNode(a.getId());
         assertEquals(2, dwg.getMC());
         dwg.addNode(a);
         dwg.addNode(c);
-        dwg.connect(a.getKey(), c.getKey(), 2.0);
+        dwg.connect(a.getId(), c.getId(), 2.0);
         assertEquals(5, dwg.getMC());
         dwg.removeEdge(0, 2);
         assertEquals(6, dwg.getMC());
