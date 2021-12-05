@@ -9,7 +9,7 @@ public class Edge implements EdgeData {
     private String info;
     private int tag;
 
-    /** Constructors */
+    /** Constructor */
     public Edge(int Src, double weight, int Dest) {
         this.src = Src;
         this.weight = weight;
