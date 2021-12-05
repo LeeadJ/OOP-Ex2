@@ -10,15 +10,15 @@ public class Edge implements EdgeData {
     private int tag;
 
     /** Constructor */
-    public Edge(int Src, double weight, int Dest) {
+    public Edge(int Src, double Weight, int Dest){
         this.src = Src;
-        this.weight = weight;
-        this.dest = Dest;
+        this.weight = Weight;
+        this. dest = Dest;
 
 
     }
     /** Copy Constructors */
-    public Edge(Edge other) {
+    public Edge(Edge other){
         this.src = other.src;
         this.weight = other.weight;
         this.dest = other.dest;
@@ -61,9 +61,7 @@ public class Edge implements EdgeData {
         this.tag = t;
     }
 
-    public String toString() {
-        return "Src: " + this.src + ".\nWeight: " + this.weight + ".\nDest: " + this.dest + ".";
+    public String toString(){
+        return "Src: "+this.src+".\nWeight: "+this.weight+".\nDest: "+this.dest+".";
     }
 }
-
-

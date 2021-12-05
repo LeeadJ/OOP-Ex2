@@ -3,6 +3,17 @@ package Ex2;
 import api.DirectedWeightedGraph;
 import api.EdgeData;
 import api.NodeData;
+import api.EdgeData;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.*;
+
+import java.io.IOException;
+import java.util.*;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,9 +24,73 @@ public class DWG implements DirectedWeightedGraph {
     public HashMap<Integer, HashMap<Integer, EdgeData>> edgeMap;
     int MC = 0;
 
+    /** Constructor. */
     public DWG(){
         this.nodeMap = new HashMap<>();
         this.edgeMap = new HashMap<>();
+    }
+
+    /** Json File Constructor. */
+    public DWG(String json) throws IOException, ParseException {
+        JSONParser jsonParser = new JSONParser();
+        //Parsing the contents of the JSON file
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader(json));
+        this.nodeMap = create_nodeMap(jsonObject);
+        this.edgeMap = create_edgeMap(jsonObject);
+    }
+
+    /** This function receives a JSON file and initializes the  edgeMap of the DWG.
+     * Return: HashMap<Integer, HashMap<Integer, EdgeData>>. */
+    private HashMap<Integer, HashMap<Integer, EdgeData>> create_edgeMap(JSONObject json_OBJ) throws IOException, ParseException {
+        //initializing a new HashMap<Integer, HashMap<Integer, EdgeData>>.
+        HashMap<Integer, HashMap<Integer, EdgeData>> edgeMap = new HashMap<>();
+        JSONArray jsonArray_Edges = (JSONArray) json_OBJ.get("Edges");
+
+        //looping through the json file (Edges).
+        for (int i=0; i<jsonArray_Edges.size(); i++){
+
+            //creating the edge.
+            String str = jsonArray_Edges.get(i).toString();
+            String[] arr = str.split("[:,]");
+            int src = Integer.parseInt(arr[1]);
+            double w = Double.parseDouble(arr[3]);
+            int dest = Integer.parseInt(arr[5].substring(0, arr[5].length()-1));
+            EdgeData temp = new Edge(src, w, dest);
+
+            //if the edgeMap does not contain a key of value 'src', create one.
+            if(edgeMap.get(src)==null){
+                HashMap<Integer, EdgeData> edge = new HashMap<>();
+                edgeMap.put(src, edge);
+            }
+            edgeMap.get(src).put(dest, temp);
+        }
+        return edgeMap;
+    }
+
+    /** This function receives a JSON file and initializes the  nodeMap of the DWG.
+     * Return: HashMap<Integer, NodeData>. */
+    private HashMap<Integer, NodeData> create_nodeMap(JSONObject json_OBJ) throws IOException, ParseException {
+        //creating a new HashMap<Integer, NodeData>.
+        HashMap<Integer, NodeData> nodeMap = new HashMap<>();
+        JSONArray jsonArray_Nodes = (JSONArray) json_OBJ.get("Nodes");
+
+        //looping through the json file (Nodes).
+        for (int i=0; i<jsonArray_Nodes.size(); i++) {
+
+            //creating a new NodeData.
+            String str = jsonArray_Nodes.get(i).toString();
+            String[] arr = str.split("[:,]");
+            double x = Double.parseDouble(arr[1].substring(1));
+            double y = Double.parseDouble(arr[2]);
+            double z = Double.parseDouble(arr[3].substring(0, arr[3].length()-1));
+            int id = Integer.parseInt(arr[5].substring(0, arr[5].length()-1));
+            Point3D p = new Point3D(x, y, z);
+            NodeData n = new GNode(id, p);
+
+            //adding the new NodeData to the nodeMap.
+            nodeMap.put(n.getKey(), n);
+        }
+        return nodeMap;
     }
 
 
