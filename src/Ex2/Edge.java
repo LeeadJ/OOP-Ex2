@@ -9,7 +9,7 @@ public class Edge implements EdgeData {
     private String info;
     private int tag;
 
-    /** Constructors */
+    /** Constructor */
     public Edge(int Src, double Weight, int Dest){
         this.src = Src;
         this.weight = Weight;
@@ -17,7 +17,7 @@ public class Edge implements EdgeData {
 
 
     }
-    // Copy:
+    /** Copy Constructors */
     public Edge(Edge other){
         this.src = other.src;
         this.weight = other.weight;

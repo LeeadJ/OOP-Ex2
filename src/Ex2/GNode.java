@@ -14,13 +14,13 @@ public class GNode implements NodeData {
     private int tag;
 
 
-    // constructor for GraphNode
+    /** Constructor */
     public GNode(int key, GeoLocation g){
         this.key = key;
         this.location = g;
     }
 
-    // copy constructor
+    /** Copy Constructor */
     public GNode(GNode other){
         this.key = other.getKey();
         this.location = other.getLocation();
