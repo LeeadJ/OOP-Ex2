@@ -22,8 +22,8 @@ class EdgeTest {
 
     @Test
     void getWeight() {
-        assertEquals(e1.getW(), 1.3118716362419698);
-        assertNotEquals(e1.getW(), 1.4518716362419698);
+        assertEquals(e1.getWeight(), 1.3118716362419698);
+        assertNotEquals(e1.getWeight(), 1.4518716362419698);
     }
 
     @Test
