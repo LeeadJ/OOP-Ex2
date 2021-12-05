@@ -2,26 +2,19 @@ package Ex2;
 
 import api.EdgeData;
 
-
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.Map;
-
 public class Edge implements EdgeData {
     private final int src;
     private final int dest;
-    private final double w;
+    private final double weight;
     private String info;
     private int tag;
 
     /**
      * Constructors
      */
-    public Edge(int Src, double w, int Dest) {
+    public Edge(int Src, double weight, int Dest) {
         this.src = Src;
-        this.w = w;
+        this.weight = weight;
         this.dest = Dest;
 
 
@@ -30,7 +23,7 @@ public class Edge implements EdgeData {
     // Copy:
     public Edge(Edge other) {
         this.src = other.src;
-        this.w = other.w;
+        this.weight = other.weight;
         this.dest = other.dest;
         this.info = other.info;
         this.tag = other.tag;
@@ -48,7 +41,7 @@ public class Edge implements EdgeData {
 
     @Override
     public double getWeight() {
-        return this.w;
+        return this.weight;
     }
 
     @Override
@@ -72,7 +65,7 @@ public class Edge implements EdgeData {
     }
 
     public String toString() {
-        return "Src: " + this.src + ".\nWeight: " + this.w + ".\nDest: " + this.dest + ".";
+        return "Src: " + this.src + ".\nWeight: " + this.weight + ".\nDest: " + this.dest + ".";
     }
 }
 

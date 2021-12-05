@@ -4,23 +4,23 @@ import api.GeoLocation;
 import api.NodeData;
 
 public class GNode implements NodeData {
-    private final int id;
-    private GeoLocation pos;
+    private final int key;
+    private GeoLocation location;
     private double weight;
     private String info;
     private int tag;
 
 
     // constructor for GraphNode
-    public GNode(int id, GeoLocation g){
-        this.id = id;
-        this.pos = g;
+    public GNode(int key, GeoLocation g){
+        this.key = key;
+        this.location = g;
     }
 
     // copy constructor
     public GNode(GNode other){
-        this.id = other.getId();
-        this.pos = other.getPos();
+        this.key = other.getKey();
+        this.location = other.getLocation();
         this.weight = other.getWeight();
         this.info = other.getInfo();
         this.tag = other.getTag();
@@ -29,18 +29,18 @@ public class GNode implements NodeData {
 
 
     @Override
-    public int getId() {
-        return this.id;
+    public int getKey() {
+        return this.key;
     }
 
     @Override
-    public GeoLocation getPos() {
-        return this.pos;
+    public GeoLocation getLocation() {
+        return this.location;
     }
 
     @Override
-    public void setPos(GeoLocation p) {
-        this.pos = p;
+    public void setLocation(GeoLocation p) {
+        this.location = p;
     }
 
     @Override
@@ -74,6 +74,6 @@ public class GNode implements NodeData {
     }
 
     public String toString(){
-        return "Key: "+this.id +".\nLocation: "+this.pos.toString()+".";
+        return "Key: "+this.key +".\nLocation: "+this.location.toString()+".";
     }
 }

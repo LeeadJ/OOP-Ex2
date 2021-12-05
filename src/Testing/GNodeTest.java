@@ -39,11 +39,11 @@ class GNodeTest {
      */
     @Test
     void getKey() {
-        Assertions.assertEquals(0, a.getId());
-        Assertions.assertEquals(1, b.getId());
-        Assertions.assertEquals(2, c.getId());
-        Assertions.assertEquals(3, d.getId());
-        Assertions.assertEquals(4, e.getId());
+        Assertions.assertEquals(0, a.getKey());
+        Assertions.assertEquals(1, b.getKey());
+        Assertions.assertEquals(2, c.getKey());
+        Assertions.assertEquals(3, d.getKey());
+        Assertions.assertEquals(4, e.getKey());
 
     }
 
@@ -52,11 +52,11 @@ class GNodeTest {
      */
     @Test
     void getLocation() {
-        Assertions.assertEquals(p1, a.getPos());
-        Assertions.assertEquals(p2, b.getPos());
-        Assertions.assertEquals(p3, c.getPos());
-        Assertions.assertEquals(p4, d.getPos());
-        Assertions.assertEquals(p5, e.getPos());
+        Assertions.assertEquals(p1, a.getLocation());
+        Assertions.assertEquals(p2, b.getLocation());
+        Assertions.assertEquals(p3, c.getLocation());
+        Assertions.assertEquals(p4, d.getLocation());
+        Assertions.assertEquals(p5, e.getLocation());
     }
 
     /**
@@ -64,14 +64,14 @@ class GNodeTest {
      */
     @Test
     void setLocation() {
-        a.setPos(p6);
-        b.setPos(p7);
-        c.setPos(p8);
-        d.setPos(p9);
-        Assertions.assertEquals(p6, a.getPos());
-        Assertions.assertEquals(p7, b.getPos());
-        Assertions.assertEquals(p8, c.getPos());
-        Assertions.assertEquals(p9, d.getPos());
+        a.setLocation(p6);
+        b.setLocation(p7);
+        c.setLocation(p8);
+        d.setLocation(p9);
+        Assertions.assertEquals(p6, a.getLocation());
+        Assertions.assertEquals(p7, b.getLocation());
+        Assertions.assertEquals(p8, c.getLocation());
+        Assertions.assertEquals(p9, d.getLocation());
 
     }
 
