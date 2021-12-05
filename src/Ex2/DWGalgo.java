@@ -7,25 +7,66 @@ import api.NodeData;
 import java.util.List;
 
 public class DWGalgo implements DirectedWeightedGraphAlgorithms {
+    DirectedWeightedGraph graph;
+
+
     @Override
     public void init(DirectedWeightedGraph g) {
-
+        this.graph = g;
     }
 
     @Override
     public DirectedWeightedGraph getGraph() {
-        return null;
+        return this.graph;
     }
 
     @Override
     public DirectedWeightedGraph copy() {
-        return null;
+        DirectedWeightedGraph copy = new DWG();
+        while(this.graph.nodeIter().hasNext()) {
+            copy.addNode(this.graph.nodeIter().next());
+        }
+        while(this.graph.edgeIter().hasNext()) {
+            copy.connect(this.graph.edgeIter().next().getSrc(), this.graph.edgeIter().next().getDest(), this.graph.edgeIter().next().getW());
+        }
+        return copy;
     }
+
 
     @Override
     public boolean isConnected() {
-        return false;
-    }
+        int nodes = 0;
+        while(this.graph.nodeIter().hasNext()){
+            nodes++;
+        }
+        for(int i = 0; i< nodes; i++){
+            boolean[] visited = new boolean[nodes];
+            DFS(this.graph, i, visited);
+            for (boolean b: visited)
+            {
+                if (!b) {
+                    return false;
+                }
+            }
+        }
+        return true;
+        }
+        // Function to perform DFS traversal on the graph on a graph
+        public static void DFS(DirectedWeightedGraph graph, int v, boolean[] visited)
+        {
+            visited[v] = true;
+
+            // do for every edge (v, u)
+            for (int u: graph.adjList.get(v))
+            {
+                // `u` is not visited
+                if (!visited[u]) {
+                    DFS(graph, u, visited);
+                }
+            }
+        }
+
+
 
     @Override
     public double shortestPathDist(int src, int dest) {
