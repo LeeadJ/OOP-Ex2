@@ -36,17 +36,26 @@ class DWGTest {
 
     @Test
     void getNode() {
-
-
-
+        dwg.addNode(a);
+        assertEquals(dwg.getNode(0), a);
     }
 
     @Test
     void getEdge() {
+        dwg.addNode(a);
+        dwg.addNode(c);
+        dwg.connect(a.getKey(), c.getKey(), 1.5);
+        EdgeData e1 = new Edge(0,1.5, 2);
+        assertEquals(dwg.edgeMap.get(a.getKey()).get(c.getKey()).getSrc(), e1.getSrc());
+        assertEquals(dwg.edgeMap.get(a.getKey()).get(c.getKey()).getDest(), e1.getDest());
+        assertEquals(dwg.edgeMap.get(a.getKey()).get(c.getKey()).getWeight(), e1.getWeight());
     }
 
     @Test
     void addNode() {
+        assertNull(dwg.getNode(0));
+        dwg.addNode(a);
+        assertEquals(dwg.getNode(0), a);
     }
 
     @Test
