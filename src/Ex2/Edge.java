@@ -17,7 +17,6 @@ public class Edge implements EdgeData {
 
 
     }
-
     /** Copy Constructors */
     public Edge(Edge other) {
         this.src = other.src;
