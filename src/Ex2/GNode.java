@@ -1,29 +1,26 @@
 package Ex2;
 
-import api.EdgeData;
 import api.GeoLocation;
 import api.NodeData;
 
-import java.util.HashMap;
-
 public class GNode implements NodeData {
-    private final int key;
-    private GeoLocation location;
+    private final int id;
+    private GeoLocation pos;
     private double weight;
     private String info;
     private int tag;
 
 
     // constructor for GraphNode
-    public GNode(int key, GeoLocation g){
-        this.key = key;
-        this.location = g;
+    public GNode(int id, GeoLocation g){
+        this.id = id;
+        this.pos = g;
     }
 
     // copy constructor
     public GNode(GNode other){
-        this.key = other.getKey();
-        this.location = other.getLocation();
+        this.id = other.getId();
+        this.pos = other.getPos();
         this.weight = other.getWeight();
         this.info = other.getInfo();
         this.tag = other.getTag();
@@ -32,18 +29,18 @@ public class GNode implements NodeData {
 
 
     @Override
-    public int getKey() {
-        return this.key;
+    public int getId() {
+        return this.id;
     }
 
     @Override
-    public GeoLocation getLocation() {
-        return this.location;
+    public GeoLocation getPos() {
+        return this.pos;
     }
 
     @Override
-    public void setLocation(GeoLocation p) {
-        this.location = p;
+    public void setPos(GeoLocation p) {
+        this.pos = p;
     }
 
     @Override
@@ -77,6 +74,6 @@ public class GNode implements NodeData {
     }
 
     public String toString(){
-        return "Key: "+this.key+".\nLocation: "+this.location.toString()+".";
+        return "Key: "+this.id +".\nLocation: "+this.pos.toString()+".";
     }
 }
