@@ -111,7 +111,6 @@ class DWGalgoTest {
         test.getGraph().connect(2, 3, 1.0);
         test.getGraph().connect(3, 0, 2.0);
         assertEquals(7.0, test.shortestPathDist(3, 2));
-
     }
 
     @Test
