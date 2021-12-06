@@ -24,6 +24,7 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     }
 
     @Override
+    // testing pull with leead
     public DirectedWeightedGraph copy() {
         DirectedWeightedGraph copy_graph = new DWG();
         Iterator<NodeData> itr_node = this.graph.nodeIter();
