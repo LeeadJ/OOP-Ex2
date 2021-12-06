@@ -261,9 +261,41 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     }
 
     @Override
-    public boolean save (String file){
-        return false;
+    public boolean save (String file) {
+        JSONObject top = new JSONObject();
+        JSONArray edge_arr = new JSONArray();
+        top.put("Edges", edge_arr);
+        JSONArray node_arr = new JSONArray();
+        top.put("Nodes", node_arr);
+        Iterator<EdgeData> itr_edge = this.graph.edgeIter();
+        while (itr_edge.hasNext()) {
+            EdgeData temp = itr_edge.next();
+            JSONObject edge_obj = new JSONObject();
+            edge_obj.put("src", temp.getSrc());
+            edge_obj.put("w", temp.getWeight());
+            edge_obj.put("dest", temp.getDest());
+            edge_arr.add(edge_obj);
+        }
+        Iterator<NodeData> itr_nodes = this.graph.nodeIter();
+        while (itr_nodes.hasNext()) {
+            NodeData temp = itr_nodes.next();
+            JSONObject node_obj = new JSONObject();
+            node_obj.put("pos", temp.getLocation().x() + "," + temp.getLocation().y() + "," + temp.getLocation().z());
+            node_obj.put("id", temp.getKey());
+            node_arr.add(node_obj);
+        }
+        try (FileWriter f = new FileWriter(file)) {
+            //We can write any JSONArray or JSONObject instance to the file
+            f.write(top.toJSONString());
+            f.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
+
 
     @Override
     public boolean load (String file){
