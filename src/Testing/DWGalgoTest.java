@@ -111,6 +111,23 @@ class DWGalgoTest {
 
     @Test
     void center() {
+        Point3D p1 = new Point3D(0.0,0.0,0.0);
+        Point3D p2 = new Point3D(3.0,8.0,10.0);
+        Point3D p3 = new Point3D(3.0,8.0,7.0);
+        Point3D p4 = new Point3D(3.0,8.0,0.0);
+        NodeData a = new GNode(0, p1);
+        NodeData b = new GNode(1, p2);
+        NodeData c = new GNode(2, p3);
+        NodeData d = new GNode(4, p4);
+        DirectedWeightedGraph g = new DWG();
+        DWGalgo test = new DWGalgo();
+        test.init(g);
+        test.getGraph().addNode(a);
+        test.getGraph().addNode(b);
+        test.getGraph().addNode(c);
+        test.getGraph().addNode(d);
+        NodeData n = test.center();
+        assertEquals(n.getKey(), b.getKey());
     }
 
     @Test
