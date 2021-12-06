@@ -12,6 +12,7 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     DirectedWeightedGraph graph;
 
 
+
     @Override
     public void init(DirectedWeightedGraph g) {
         this.graph = g;
@@ -24,26 +25,27 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public DirectedWeightedGraph copy() {
-        DirectedWeightedGraph copy = new DWG();
+        DirectedWeightedGraph copy_graph = new DWG();
         Iterator<NodeData> itr_node = this.graph.nodeIter();
         while(itr_node.hasNext()) {
             NodeData temp_node = new GNode(itr_node.next());
-            copy.addNode(temp_node);
+            copy_graph.addNode(temp_node);
         }
         Iterator<EdgeData> itr_edge = this.graph.edgeIter();
         while(itr_edge.hasNext()) {
             EdgeData temp_edge = new Edge(itr_edge.next());
-            copy.connect(temp_edge.getSrc(), temp_edge.getDest(), temp_edge.getWeight());
+            copy_graph.connect(temp_edge.getSrc(), temp_edge.getDest(), temp_edge.getWeight());
         }
-        return copy;
+        return copy_graph;
     }
 
 
     @Override
     public boolean isConnected() {
         int nodes = 0;
-        while(this.graph.nodeIter().hasNext()){
-            this.graph.nodeIter().next();
+        Iterator<NodeData> itr_node = this.graph.nodeIter();
+        while(itr_node.hasNext()){
+            itr_node.next();
             nodes++;
         }
         for(int i = 0; i< nodes; i++){
