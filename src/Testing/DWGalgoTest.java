@@ -177,13 +177,17 @@ class DWGalgoTest {
         test.getGraph().connect(2, 0, 5.0);
         test.getGraph().connect(2, 3, 1.0);
         test.getGraph().connect(3, 0, 2.0);
-        test.save("json_array_output.json");
+        assertTrue(test.save("json_array_output.json"));
     }
 
     @Test
     void load() throws IOException, ParseException {
-        String path = "C:\\Users\\Leead\\IdeaProjects\\OOP-Ex2\\G3.json";
-        DirectedWeightedGraphAlgorithms test = new DWGalgo();
-        assertTrue(test.load(path));
+//        String path = "C:\\Users\\Leead\\IdeaProjects\\OOP-Ex2\\G3.json";
+//        DirectedWeightedGraphAlgorithms test = new DWGalgo();
+//        assertTrue(test.load(path));
+
+        String file = "json_array_output.json";
+        DirectedWeightedGraphAlgorithms test1 = new DWGalgo();
+        assertTrue(test1.load(file));
     }
 }
