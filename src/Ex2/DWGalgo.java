@@ -4,10 +4,10 @@ import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 import api.EdgeData;
 import api.NodeData;
+import org.json.simple.parser.ParseException;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     DirectedWeightedGraph graph;
@@ -87,6 +87,78 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     /** This function receives the src, dest and graph. It returns the shortest path between src and dest nodes.
      * Return: Double. */
     private double find_shortestPathDist(int src, int dest, DirectedWeightedGraph graph) {
+        double[][] node_matrix = matrix_initializer(graph);
+        System.out.println("Starting array: "+Arrays.deepToString(node_matrix));
+        int[][] stam = next_matrix_initializer(node_matrix);
+        warshall(node_matrix, stam);
+        System.out.println("Final array: "+Arrays.deepToString(node_matrix));
+        return node_matrix[src][dest];
+    }
+
+    /** This is the Floyd Warshall Algorithm, function. It calculates the shortest path between two indexes.
+     * Return: VOID. */
+    private void warshall(double[][] node_matrix, int[][] next_matrix) {
+        int len = node_matrix.length;
+        for (int k = 0; k < len; k++)
+            for (int i = 0; i < len; i++)
+                for (int j = 0; j < len; j++) {
+                    if (node_matrix[i][k] == -1.0 || node_matrix[k][j] == -1.0)
+                        continue;
+                    if (node_matrix[i][j] > node_matrix[i][k] + node_matrix[k][j]) {
+                        node_matrix[i][j] = node_matrix[i][k] + node_matrix[k][j];
+                        next_matrix[i][j] = next_matrix[i][k];
+                    }
+                }
+    }
+
+
+    @Override
+    public List<NodeData> shortestPath ( int src, int dest){
+        double[][] node_matrix = matrix_initializer(this.graph);
+        int[][] next_matrix = next_matrix_initializer(node_matrix);
+        warshall(node_matrix, next_matrix);
+        ArrayList<NodeData> ans = constructPath(src, dest, next_matrix, this.graph);
+        printPath(ans);
+        return  ans;
+    }
+    /** Next Matrix initializer*/
+    public static int[][] next_matrix_initializer(double[][] node_matrix){
+        int len = node_matrix.length;
+        int[][] next_matrix = new int[len][len];
+        for(int i=0; i<len; i++) {
+            for (int j = 0; j < len; j++) {
+                if(node_matrix[i][j] == -1.0)
+                    next_matrix[i][j] = -1;
+                else
+                    next_matrix[i][j] = j;
+            }
+        }
+        return  next_matrix;
+    }
+    /** Function construct the shortest path between u and v*/
+    public static ArrayList<NodeData> constructPath(int u, int v, int[][] next_matrix, DirectedWeightedGraph graph) {
+        // If there's no path between
+        // node u and v, simply return
+        // an empty array
+        if (next_matrix[u][v] == -1)
+            return null;
+
+        // Storing the path in a vector
+        Vector<Integer> path = new Vector<Integer>();
+        path.add(u);
+
+        while (u != v)
+        {
+            u = next_matrix[u][v];
+            path.add(u);
+        }
+        ArrayList<NodeData> arr = new ArrayList<>();
+        for(int i : path)
+            arr.add(graph.getNode(i));
+        return arr;
+    }
+    /** Matrix initializer */
+    public static double[][] matrix_initializer(DirectedWeightedGraph graph){
         //finding the highest Node ID.
         int i, j;
         int max_id = 0;
@@ -103,70 +175,51 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
         double[][] node_matrix = new double[max_id][max_id];
         for (i = 0; i < max_id; i++) {
             for (j = 0; j < max_id; j++) {
+                //if the nodes don't exist, initialize with -1.0
                 try{
                     if(graph.getNode(i)==null || graph.getNode(j)==null){
-                        node_matrix[i][j] = -1.0;
+                        node_matrix[i][j] = -99.0;
                         continue;
                     }
                 }
                 catch (NullPointerException e){
-                    node_matrix[i][j] = -1.0;
+                    node_matrix[i][j] = -99.0;
                     continue;
                 }
-
-                //initializing the indexes that edges don't exist with MAX:
+                //initializing the main diagonal with zeros:
+                if (i == j) { // same node.
+                    node_matrix[i][j] = 0.0;
+                    continue;
+                }
+                //initializing the indexes that edges don't exist with -1.0:
                 try {
-                    if (graph.getEdge(i, j) == null && graph.getNode(i)!=null && graph.getNode(j)!=null ) {
-                        node_matrix[i][j] = 0.0;
+                    if (graph.getEdge(i, j) == null && graph.getNode(i)!=null && graph.getNode(j)!=null) {
+                        node_matrix[i][j] = Double.MAX_VALUE;
                         continue;
                     }
                 }
                 catch (NullPointerException d){
-                        node_matrix[i][j] = 0.0;
-                        continue;
-                }
-
-                //initializing the main diagonal with zeros:
-                if (i == j) { // same node.
-                    node_matrix[i][j] = 0.0;
+                    node_matrix[i][j] = Double.MAX_VALUE;
                     continue;
                 }
                 //else the edge exists,  initialize the index with its weight.
                 node_matrix[i][j] = graph.getEdge(i, j).getWeight();
             }
         }
-        System.out.println("Starting array: "+Arrays.deepToString(node_matrix));
-        return warshall(src, dest, node_matrix);
-    }
-
-    /** This is the Floyed Warshall Algorith, function. It calculates the shortest path between two indexes.
-     * Return: Double. */
-    private double warshall(int src, int dest, double[][] node_matrix) {
-        int len = node_matrix.length;
-        for(int k=0; k<len; k++)
-            for(int i=0; i<len; i++)
-                for(int j=0; j<len; j++) {
-                    if(node_matrix[i][j] == -1.0)
-                        continue;
-                    if (node_matrix[i][k] > 0.0 && node_matrix[k][j] > 0.0) {
-                        if (node_matrix[i][j] == 0.0 && i != j) {
-                            node_matrix[i][j] = node_matrix[i][k] + node_matrix[k][j];
-                            continue;
-                        }
-                        if (node_matrix[i][k] + node_matrix[k][j] < node_matrix[i][j])
-                            node_matrix[i][j] = node_matrix[i][k] + node_matrix[k][j];
-                    }
-                }
-
-        System.out.println("Finish array: "+Arrays.deepToString(node_matrix));
-        return node_matrix[src][dest];
+        return node_matrix;
     }
 
 
-    @Override
-    public List<NodeData> shortestPath ( int src, int dest){
-        return null;
+    /** Prints the shortest path */
+    public static void printPath(ArrayList<NodeData> path) {
+        int n = path.size();
+        System.out.print("The Shortest path: ");
+        for(int i = 0; i < n - 1; i++)
+            System.out.print(path.get(i).getKey() + " -> ");
+        System.out.print(path.get(n - 1).getKey() + "\n");
     }
+
+
 
     @Override
     public NodeData center () {
@@ -209,6 +262,15 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public boolean load (String file){
-        return false;
+        try{
+            DirectedWeightedGraph graph = new DWG(file);
+            DirectedWeightedGraphAlgorithms test = new DWGalgo();
+            test.init(graph);
+            return true;
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+            e.printStackTrace();
+            return false;
+        }
     }
 }
