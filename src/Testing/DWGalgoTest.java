@@ -19,7 +19,7 @@ class DWGalgoTest {
     NodeData a = new GNode(0, p1);
     NodeData b = new GNode(1, p2);
     NodeData c = new GNode(2, p3);
-    NodeData d = new GNode(4, p4);
+    NodeData d = new GNode(3, p4);
     NodeData e = new GNode(4, p5);
 
     EdgeData e1 = new Edge(0,1.0, 3);
@@ -82,10 +82,6 @@ class DWGalgoTest {
     }
 
     @Test
-    void DFS() {
-    }
-
-    @Test
     void shortestPathDist() {
         DirectedWeightedGraph g = new DWG();
         DWGalgo test = new DWGalgo();
@@ -94,19 +90,36 @@ class DWGalgoTest {
         test.getGraph().addNode(b);
         test.getGraph().addNode(c);
         test.getGraph().addNode(d);
-        test.getGraph().connect(0, 1,3.0);
-        test.getGraph().connect(0, 4, 7.0);
-        test.getGraph().connect(1, 0, 8.0);
-        test.getGraph().connect(1, 2,2.0);
-        test.getGraph().connect(2, 4,1.0);
-        test.getGraph().connect(4, 0,2.0);
-        test.getGraph().connect(2, 0,5.0);
-        assertEquals(3.0, test.shortestPathDist(1,4));
+        test.getGraph().addNode(e);
+        test.getGraph().connect(0, 1,1.0);
+        test.getGraph().connect(0, 2, 10.0);
+        test.getGraph().connect(1, 3, 1.0);
+        test.getGraph().connect(2, 3,20.0);
+        test.getGraph().connect(2, 0,3.0);
+        test.getGraph().connect(2, 4,2.0);
+        test.getGraph().connect(4, 1,5.0);
+        assertEquals(5.0, test.shortestPathDist(2,3));
 
     }
 
     @Test
     void shortestPath() {
+        DirectedWeightedGraph g = new DWG();
+        DWGalgo test = new DWGalgo();
+        test.init(g);
+        test.getGraph().addNode(a);
+        test.getGraph().addNode(b);
+        test.getGraph().addNode(c);
+        test.getGraph().addNode(d);
+        test.getGraph().addNode(e);
+        test.getGraph().connect(0, 1,1.0);
+        test.getGraph().connect(0, 2, 10.0);
+        test.getGraph().connect(1, 3, 1.0);
+        test.getGraph().connect(2, 3,20.0);
+        test.getGraph().connect(2, 0,3.0);
+        test.getGraph().connect(2, 4,2.0);
+        test.getGraph().connect(4, 1,5.0);
+        System.out.println(test.shortestPath(2,3));
     }
 
     @Test
