@@ -170,7 +170,31 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public NodeData center () {
-        return null;
+        int node_id=0;
+        double min_distance = Double.MAX_VALUE;
+
+        //looping through the nodes in the graph using the iterator.
+        Iterator<NodeData> itr1 = graph.nodeIter();
+        while(itr1.hasNext()){
+            //initializing the first node.
+            NodeData curr = itr1.next();
+            double curr_min_dist = Double.MAX_VALUE;
+            Iterator<NodeData> itr2 = graph.nodeIter();
+            while(itr2.hasNext()){
+                NodeData n = itr2.next();
+                //if the iterator is pointing at the same node, continue to the next.
+                if(n.getKey()==curr.getKey())
+                    continue;
+                //check if the distance is the lowest for the current node.
+                if(curr.getLocation().distance(n.getLocation()) < curr_min_dist)
+                    curr_min_dist = curr.getLocation().distance(n.getLocation());
+            }
+            if(curr_min_dist < min_distance){
+                min_distance = curr_min_dist;
+                node_id = curr.getKey();
+            }
+        }
+        return this.graph.getNode(node_id);
     }
 
     @Override
