@@ -24,7 +24,12 @@ public class GNode implements NodeData {
         this.weight = other.getWeight();
         this.info = other.getInfo();
         this.tag = other.getTag();
+    }
 
+    /** Copy NodeData Constructor*/
+    public GNode(NodeData other){
+        this.key = other.getKey();
+        this.location = other.getLocation();
     }
 
 
