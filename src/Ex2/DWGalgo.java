@@ -22,6 +22,7 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     }
 
     @Override
+    // testing pull with leead
     public DirectedWeightedGraph copy() {
         DirectedWeightedGraph copy = new DWG();
 
