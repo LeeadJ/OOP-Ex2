@@ -43,6 +43,7 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public boolean isConnected() {
+        // testing leead commit
         int nodes = 0;
         Iterator<NodeData> itr_node = this.graph.nodeIter();
         while(itr_node.hasNext()){
