@@ -162,7 +162,22 @@ class DWGalgoTest {
 
     @Test
     void save() {
-
+        DirectedWeightedGraph g = new DWG();
+        DWGalgo test = new DWGalgo();
+        test.init(g);
+        test.getGraph().addNode(a);
+        test.getGraph().addNode(b);
+        test.getGraph().addNode(c);
+        test.getGraph().addNode(d);
+        test.getGraph().addNode(e);
+        test.getGraph().connect(0, 1, 3.0);
+        test.getGraph().connect(0, 3, 7.0);
+        test.getGraph().connect(1, 0, 8.0);
+        test.getGraph().connect(1, 2, 2.0);
+        test.getGraph().connect(2, 0, 5.0);
+        test.getGraph().connect(2, 3, 1.0);
+        test.getGraph().connect(3, 0, 2.0);
+        test.save("json_array_output.json");
     }
 
     @Test
