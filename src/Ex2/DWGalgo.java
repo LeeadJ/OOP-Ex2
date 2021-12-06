@@ -5,6 +5,7 @@ import api.DirectedWeightedGraphAlgorithms;
 import api.EdgeData;
 import api.NodeData;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -87,7 +88,7 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
      * Return: Double. */
     private double find_shortestPathDist(int src, int dest, DirectedWeightedGraph graph) {
         //finding the highest Node ID.
-        int i, j, k;
+        int i, j;
         int max_id = 0;
         Iterator<NodeData> itr = graph.nodeIter();
         while (itr.hasNext()) {
@@ -102,11 +103,29 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
         double[][] node_matrix = new double[max_id][max_id];
         for (i = 0; i < max_id; i++) {
             for (j = 0; j < max_id; j++) {
-                //initializing the indexes that edges don't exist with MAX:
-                if (graph.getEdge(i, j) == null && i != j) {
-                    node_matrix[i][j] = 0.0;
+                try{
+                    if(graph.getNode(i)==null || graph.getNode(j)==null){
+                        node_matrix[i][j] = -1.0;
+                        continue;
+                    }
+                }
+                catch (NullPointerException e){
+                    node_matrix[i][j] = -1.0;
                     continue;
                 }
+
+                //initializing the indexes that edges don't exist with MAX:
+                try {
+                    if (graph.getEdge(i, j) == null && graph.getNode(i)!=null && graph.getNode(j)!=null ) {
+                        node_matrix[i][j] = 0.0;
+                        continue;
+                    }
+                }
+                catch (NullPointerException d){
+                        node_matrix[i][j] = 0.0;
+                        continue;
+                }
+
                 //initializing the main diagonal with zeros:
                 if (i == j) { // same node.
                     node_matrix[i][j] = 0.0;
@@ -116,6 +135,7 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
                 node_matrix[i][j] = graph.getEdge(i, j).getWeight();
             }
         }
+        System.out.println("Starting array: "+Arrays.deepToString(node_matrix));
         return warshall(src, dest, node_matrix);
     }
 
@@ -125,10 +145,20 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
         int len = node_matrix.length;
         for(int k=0; k<len; k++)
             for(int i=0; i<len; i++)
-                for(int j=0; j<len; j++)
-                    if(node_matrix[i][k] > 0.0 && node_matrix[k][j] > 0.0 && node_matrix[i][j] > 0.0)
-                        if(node_matrix[i][k] + node_matrix[k][j] < node_matrix[i][j])
+                for(int j=0; j<len; j++) {
+                    if(node_matrix[i][j] == -1.0)
+                        continue;
+                    if (node_matrix[i][k] > 0.0 && node_matrix[k][j] > 0.0) {
+                        if (node_matrix[i][j] == 0.0 && i != j) {
                             node_matrix[i][j] = node_matrix[i][k] + node_matrix[k][j];
+                            continue;
+                        }
+                        if (node_matrix[i][k] + node_matrix[k][j] < node_matrix[i][j])
+                            node_matrix[i][j] = node_matrix[i][k] + node_matrix[k][j];
+                    }
+                }
+
+        System.out.println("Finish array: "+Arrays.deepToString(node_matrix));
         return node_matrix[src][dest];
     }
 
