@@ -69,17 +69,18 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
         return true;
         }
 
-        // Function to perform DFS traversal on the graph on a graph
-        public static void DFS(DirectedWeightedGraph graph, int v, boolean[] visited) {
-            visited[v] = true;
-            Iterator<EdgeData> itr_edge = graph.edgeIter(v);
-            while (itr_edge.hasNext()) {
-                EdgeData temp_edge = new Edge(itr_edge.next());
-                if (!visited[temp_edge.getDest()]) {
-                    DFS(graph, temp_edge.getDest(), visited);
-                }
+    /**This function performs DFS traversal on the graph on a graph.
+     * Return: VOID. */
+    public static void DFS(DirectedWeightedGraph graph, int v, boolean[] visited) {
+        visited[v] = true;
+        Iterator<EdgeData> itr_edge = graph.edgeIter(v);
+        while (itr_edge.hasNext()) {
+            EdgeData temp_edge = new Edge(itr_edge.next());
+            if (!visited[temp_edge.getDest()]) {
+                DFS(graph, temp_edge.getDest(), visited);
             }
         }
+    }
 
 
 
@@ -126,7 +127,8 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
         printPath(ans);
         return  ans;
     }
-    /** Next Matrix initializer*/
+    /** This function initializes the next matrix.
+     * Return: int[][]. */
     public static int[][] next_matrix_initializer(double[][] node_matrix){
         int len = node_matrix.length;
         int[][] next_matrix = new int[len][len];
@@ -140,7 +142,8 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
         }
         return  next_matrix;
     }
-    /** Function construct the shortest path between u and v*/
+    /** This function construct the shortest path between u and v.
+     * Return: ArrayList<NodeData>. */
     public static ArrayList<NodeData> constructPath(int u, int v, int[][] next_matrix, DirectedWeightedGraph graph) {
         // If there's no path between
         // node u and v, simply return
@@ -162,7 +165,8 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
             arr.add(graph.getNode(i));
         return arr;
     }
-    /** Matrix initializer */
+    /** This function initializes a matrix given a graph.
+     * Return: Double[][].  */
     public static double[][] matrix_initializer(DirectedWeightedGraph graph){
         //finding the highest Node ID.
         int i, j;
@@ -214,7 +218,6 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
         return node_matrix;
     }
 
-
     /** Prints the shortest path */
     public static void printPath(ArrayList<NodeData> path) {
         int n = path.size();
@@ -257,7 +260,130 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public List<NodeData> tsp (List < NodeData > cities) {
+        double[][] matrix = matrix_tsp_initializer(this.graph, cities);
+        System.out.println("Original Matrix: "+Arrays.deepToString(matrix));
+        warshall_tsp(matrix);
+        System.out.println("Cleanes Matrix: "+Arrays.deepToString(matrix));
+        int len = matrix.length;
+        boolean[] visted = new boolean[len];
+        double ans = Double.MAX_VALUE;
+        int t = 1, f = 0, skip = -1;
+        visted[0] = true;
+        int loop_count = 0;
+        ArrayList<Integer> arr = new ArrayList<>();
+        arr.add(0);
+        ans = tsp_helper(matrix, visted, 0, len, 1, 0.0, ans, loop_count, arr);
+        System.out.println(ans);
+        arr.add(0);
+        System.out.println(arr);
+        List<NodeData> arr_final = new ArrayList<>();
+        for(int i : arr){
+            arr_final.add(cities.get(i));
+        }
+        System.out.println(arr_final);
         return null;
+    }
+
+    /** This function recursively computes the tsp.
+     * This function idea was inspired by the 'TSP geekesforgeeks article.
+     * Return: Double. */
+    public static double tsp_helper(double[][] matrix, boolean[] visted, int currPos, int len, int count, double cost, double ans, int loop_count, ArrayList<Integer> arr){
+        if (count == len && matrix[currPos][0] > 0) {
+            ans = Math.min(ans, cost + matrix[currPos][0]);
+            return ans;
+        }
+        for(int i=0; i<len; i++){
+            if (visted[i] == false && matrix[currPos][i] > 0) {
+                // Mark as visited
+                visted[i] = true;
+                if(arr.get(arr.size()-1) != i)
+                    arr.add(i);
+                loop_count++;
+                ans = tsp_helper(matrix, visted, i, len, count + 1, cost + matrix[currPos][i], ans, loop_count, arr);
+                // Mark ith node as unvisited
+                visted[i] = false;
+            }
+        }
+        return ans;
+    }
+    /** This is the Floyd Warshall Algorithm, function. It calculates the shortest path between two indexes.
+     * Return: VOID. */
+    private void warshall_tsp(double[][] node_matrix) {
+        int len = node_matrix.length;
+        for (int k = 0; k < len; k++)
+            for (int i = 0; i < len; i++)
+                for (int j = 0; j < len; j++) {
+                    if (node_matrix[i][k] == -99.0 || node_matrix[k][j] == -99.0)
+                        continue;
+                    if(node_matrix[i][j] == -99.0)
+                        node_matrix[i][j] = node_matrix[i][k] + node_matrix[k][j];
+                    else
+                        if (node_matrix[i][j] > node_matrix[i][k] + node_matrix[k][j]) {
+                            node_matrix[i][j] = node_matrix[i][k] + node_matrix[k][j];
+                    }
+                }
+    }
+
+    /** This function initializes the tsp Matrix.
+     * Return: double[][]. */
+    public static double[][] matrix_tsp_initializer(DirectedWeightedGraph graph, List < NodeData > cities) {
+        //finding the highest Node ID.
+        int i, j;
+        int max_id = 0;
+        ArrayList<Integer> key_id = new ArrayList<>();
+        for (NodeData n : cities) {
+            key_id.add(n.getKey());
+            if (n.getKey() > max_id)
+                max_id = n.getKey();
+        }
+        max_id += 1;
+
+        //initializing the starting matrix with -1 and 0.
+        double[][] node_matrix = new double[max_id][max_id];
+        for (i = 0; i < max_id; i++)
+            Arrays.fill(node_matrix[i], -99);//-99 == edge doesn't exist
+        for (i = 0; i < max_id; i++) {
+            for (j = 0; j < max_id; j++) {
+                if (!key_id.contains(i) || !key_id.contains(j)) {
+                    node_matrix[i][j] = -1.0; //-1 = node not in list
+                } else if (i == j)
+                    node_matrix[i][j] = 0.0; // 0 = same node index
+            }
+        }
+
+        for (i = 0; i < max_id; i++) {
+            try{
+                Iterator<EdgeData> itr = graph.edgeIter(i);
+                while (itr.hasNext()) {
+                    EdgeData temp = itr.next();
+                    try {
+                        if (node_matrix[i][temp.getDest()] != -1.0 && i != temp.getDest())
+                            node_matrix[i][temp.getDest()] = temp.getWeight();
+                    } catch (IndexOutOfBoundsException ignored) {
+                    }
+                }
+            }
+            catch (NullPointerException ignored) {
+            }
+        }
+
+        int count = 0;
+        for(i = 0; i<node_matrix.length; i++)
+            if(node_matrix[0][i] != -1.0)
+                count++;
+        int k=0;
+        double[][] clean_matrix = new double[count][count];
+        for(i = 0; i<max_id; i++){
+            if(node_matrix[i][0] == -1.0)
+                continue;
+            int y=0;
+            for(j=0; j<max_id; j++){
+                if(node_matrix[i][j] != -1.0)
+                    clean_matrix[k][y++] = node_matrix[i][j];
+            }
+            k++;
+        }
+        return clean_matrix;
     }
 
     @Override

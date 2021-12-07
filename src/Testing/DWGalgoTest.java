@@ -9,6 +9,8 @@ import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -158,6 +160,30 @@ class DWGalgoTest {
 
     @Test
     void tsp() {
+        DirectedWeightedGraph g = new DWG();
+        DWGalgo test = new DWGalgo();
+        test.init(g);
+        test.getGraph().addNode(a);
+        test.getGraph().addNode(b);
+        test.getGraph().addNode(c);
+        test.getGraph().addNode(d);
+        test.getGraph().addNode(e);
+        test.getGraph().connect(0, 1, 3.0);
+        test.getGraph().connect(0, 4, 7.0);
+        test.getGraph().connect(1, 0, 8.0);
+        test.getGraph().connect(1, 2, 2.0);
+        test.getGraph().connect(2, 0, 5.0);
+        test.getGraph().connect(2, 4, 1.0);
+        test.getGraph().connect(4, 0, 2.0);
+        List<NodeData> ll = new ArrayList<>();
+//        ll.add(c);
+        ll.add(a); //0 //0
+        ll.add(b); //1 //1
+        ll.add(e);//3 //2
+        DWGalgo.matrix_tsp_initializer(test.getGraph(), ll);
+        test.tsp(ll);
+
+
     }
 
     @Test
