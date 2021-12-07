@@ -11,6 +11,7 @@ import java.io.FileReader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
+import org.w3c.dom.traversal.NodeIterator;
 
 import java.io.IOException;
 import java.util.*;
@@ -18,6 +19,7 @@ import java.util.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class DWG implements DirectedWeightedGraph {
     public HashMap<Integer, NodeData> nodeMap;
@@ -127,21 +129,17 @@ public class DWG implements DirectedWeightedGraph {
     //////////////////////////////////ADD EXCEPTIONS///////////////////////////////////////////////////
     @Override
     public Iterator<NodeData> nodeIter() {
-        return this.nodeMap.values().iterator();
+        return new NodeIterator();
     }
 
     @Override
     public Iterator<EdgeData> edgeIter() {
-        HashMap<Integer, EdgeData> new_map = new HashMap<>();
-        for(HashMap<Integer, EdgeData> map : this.edgeMap.values())
-            for(EdgeData edge : map.values())
-                new_map.put(edge.getDest(), edge);
-        return new_map.values().iterator();
+        return new EdgeIterator();
     }
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
-        return this.edgeMap.get(node_id).values().iterator();
+        return new edgeIterNode(node_id);
     }
 
     @Override
@@ -183,5 +181,140 @@ public class DWG implements DirectedWeightedGraph {
     @Override
     public int getMC() {
         return this.MC;
+    }
+
+    private class NodeIterator implements Iterator<NodeData>{
+        private int currMC;
+        private Iterator<NodeData> itr_node;
+        private NodeData temp;
+
+        public  NodeIterator(){
+            this.currMC = MC;
+            itr_node = nodeMap.values().iterator();
+        }
+
+        @Override
+        public boolean hasNext() {
+            if(this.currMC != MC){
+                throw new RuntimeException("Graph has changed since the iterator was constructed");
+            }
+            return itr_node.hasNext();
+        }
+
+        @Override
+        public NodeData next() {
+            if(this.currMC != MC){
+                throw new RuntimeException("Graph has changed since the iterator was constructed");
+            }
+            temp = itr_node.next();
+            return temp;
+        }
+
+        @Override
+        public void remove() {
+            if(this.currMC != MC){
+                throw new RuntimeException("Graph has changed since the iterator was constructed");
+            }
+            currMC++;
+            itr_node.remove();
+            removeNode(temp.getKey());
+        }
+
+
+        @Override
+        public void forEachRemaining(Consumer<? super NodeData> action) {
+            Iterator.super.forEachRemaining(action);
+        }
+
+    }
+
+    private class EdgeIterator implements Iterator<EdgeData>{
+        private int Edgemc;
+        private Iterator<EdgeData> itr_edge;
+        private EdgeData temp_edge;
+
+        public EdgeIterator(){
+            this.Edgemc = MC;;
+            HashMap<Integer, EdgeData> new_map = new HashMap<>();
+            for(HashMap<Integer, EdgeData> map : edgeMap.values())
+                for(EdgeData edge : map.values())
+                    new_map.put(edge.getDest(), edge);
+            this.itr_edge = new_map.values().iterator();
+        }
+
+        @Override
+        public boolean hasNext() {
+            if(this.Edgemc != MC){
+                throw new RuntimeException("Graph has changed since the iterator was constructed");
+            }
+            return itr_edge.hasNext();
+        }
+
+        @Override
+        public EdgeData next() {
+            if(this.Edgemc != MC){
+                throw new RuntimeException("Graph has changed since the iterator was constructed");
+            }
+            this.temp_edge = itr_edge.next();
+            return this.temp_edge;
+        }
+
+        @Override
+        public void remove() {
+            if(this.Edgemc != MC){
+                throw new RuntimeException("Graph has changed since the iterator was constructed");
+            }
+            Edgemc++;
+            itr_edge.remove();
+            removeEdge(temp_edge.getSrc(), temp_edge.getDest());
+        }
+
+        @Override
+        public void forEachRemaining(Consumer<? super EdgeData> action) {
+            Iterator.super.forEachRemaining(action);
+        }
+    }
+
+    private class edgeIterNode implements Iterator<EdgeData>{
+        private int Edgemc;
+        private Iterator<EdgeData> itr_edge;
+        private EdgeData temp_edge;
+
+        public edgeIterNode(int GNodeid){
+            this.Edgemc = MC;
+            this.itr_edge = edgeMap.get(GNodeid).values().iterator();
+        }
+
+        @Override
+        public boolean hasNext() {
+            if(this.Edgemc != MC){
+                throw new RuntimeException("Graph has changed since the iterator was constructed");
+            }
+            return this.itr_edge.hasNext();
+        }
+
+        @Override
+        public EdgeData next() {
+            if(this.Edgemc != MC){
+                throw new RuntimeException("Graph has changed since the iterator was constructed");
+            }
+            this.temp_edge = itr_edge.next();
+            return this.temp_edge;
+        }
+
+        @Override
+        public void remove() {
+            if(this.Edgemc != MC){
+                throw new RuntimeException("Graph has changed since the iterator was constructed");
+            }
+            Edgemc++;
+            itr_edge.remove();
+            removeEdge(temp_edge.getSrc(), temp_edge.getDest());
+        }
+
+        @Override
+        public void forEachRemaining(Consumer<? super EdgeData> action) {
+            Iterator.super.forEachRemaining(action);
+        }
     }
 }
