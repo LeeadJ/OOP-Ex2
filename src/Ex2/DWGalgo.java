@@ -48,15 +48,14 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public boolean isConnected() {
-        // testing leead commit is gay
         int nodes = 0;
         Iterator<NodeData> itr_node = this.graph.nodeIter();
         while(itr_node.hasNext()){
             itr_node.next();
             nodes++;
         }
+        boolean[] visited = new boolean[nodes];
         for(int i = 0; i< nodes; i++){
-            boolean[] visited = new boolean[nodes];
             DFS(this.graph, i, visited);
             for (boolean b: visited)
             {
@@ -66,21 +65,50 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
             }
         }
         return true;
-        }
+    }
+
 
     /**This function performs DFS traversal on the graph on a graph.
      * Return: VOID. */
-    public static void DFS(DirectedWeightedGraph graph, int v, boolean[] visited) {
-        visited[v] = true;
-        Iterator<EdgeData> itr_edge = graph.edgeIter(v);
-        while (itr_edge.hasNext()) {
-            EdgeData temp_edge = new Edge(itr_edge.next());
-            if (!visited[temp_edge.getDest()]) {
-                DFS(graph, temp_edge.getDest(), visited);
+    void DFS(DirectedWeightedGraph graph, int v, boolean[] visited )
+    {
+
+
+        // Create a stack for DFS
+        Stack<NodeData> stack = new Stack<>();
+
+        // Push the current source node
+        stack.push(graph.getNode(v));
+
+        while(!stack.empty())
+        {
+            // Pop a vertex from stack and print it
+            v = stack.peek().getKey();
+            stack.pop();
+
+            // Stack may contain same vertex twice. So
+            // we need to print the popped item only
+            // if it is not visited.
+            if(!visited[v])
+            {
+                visited[v] = true;
             }
+
+            // Get all adjacent vertices of the popped vertex s
+            // If a adjacent has not been visited, then push it
+            // to the stack.
+            Iterator<EdgeData> itr_edge = graph.edgeIter(v);
+
+            while (itr_edge.hasNext())
+            {
+                EdgeData e = itr_edge.next();
+                int edge = e.getDest();
+                if(!visited[edge])
+                    stack.push(graph.getNode(edge));
+            }
+
         }
     }
-
 
 
 
