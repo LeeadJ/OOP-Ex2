@@ -6,7 +6,6 @@ import api.EdgeData;
 import api.NodeData;
 import org.json.simple.parser.ParseException;
 
-import api.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -170,21 +169,15 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     public static double[][] matrix_initializer(DirectedWeightedGraph graph){
         //finding the highest Node ID.
         int i, j;
-        int max_id = 0;
-        Iterator<NodeData> itr = graph.nodeIter();
-        while (itr.hasNext()) {
-            NodeData temp = itr.next();
-            if (temp.getKey() > max_id)
-                max_id = temp.getKey();
-        }
-        max_id += 1;
+        int max_id = find_Highest_Node(graph);
+        max_id++;
 
         //initializing the matrix:
         Iterator<NodeData> itr2 = graph.nodeIter();
         double[][] node_matrix = new double[max_id][max_id];
         for (i = 0; i < max_id; i++) {
             for (j = 0; j < max_id; j++) {
-                //if the nodes don't exist, initialize with -1.0
+                //if the nodes don't exist, initialize with -99.0
                 try{
                     if(graph.getNode(i)==null || graph.getNode(j)==null){
                         node_matrix[i][j] = -99.0;
@@ -200,7 +193,7 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
                     node_matrix[i][j] = 0.0;
                     continue;
                 }
-                //initializing the indexes that edges don't exist with -1.0:
+                //initializing the indexes that edges don't exist with Max Value:
                 try {
                     if (graph.getEdge(i, j) == null && graph.getNode(i)!=null && graph.getNode(j)!=null) {
                         node_matrix[i][j] = Double.MAX_VALUE;
@@ -231,31 +224,31 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public NodeData center () {
-        int node_id=0;
-        double min_distance = Double.MAX_VALUE;
-
-        //looping through the nodes in the graph using the iterator.
-        Iterator<NodeData> itr1 = graph.nodeIter();
-        while(itr1.hasNext()){
-            //initializing the first node.
-            NodeData curr = itr1.next();
-            double curr_min_dist = Double.MAX_VALUE;
-            Iterator<NodeData> itr2 = graph.nodeIter();
-            while(itr2.hasNext()){
-                NodeData n = itr2.next();
-                //if the iterator is pointing at the same node, continue to the next.
-                if(n.getKey()==curr.getKey())
-                    continue;
-                //check if the distance is the lowest for the current node.
-                if(curr.getLocation().distance(n.getLocation()) < curr_min_dist)
-                    curr_min_dist = curr.getLocation().distance(n.getLocation());
+        if(this.isConnected()){
+            double[][] node_matrix = matrix_initializer(graph);
+            int[][] stam = next_matrix_initializer(node_matrix);
+            warshall(node_matrix, stam);
+            double[] max_nodes_weight = new double[node_matrix.length];
+            for(int i=0; i<node_matrix.length; i++){
+                double max = 0.0;
+                for(int j=0; j<node_matrix.length; j++){
+                    if(node_matrix[i][j] > max)
+                        max = node_matrix[i][j];
+                }
+                max_nodes_weight[i] = max;
             }
-            if(curr_min_dist < min_distance){
-                min_distance = curr_min_dist;
-                node_id = curr.getKey();
+            double min = Double.MAX_VALUE;
+            int index = 0;
+            for(int i=0; i<max_nodes_weight.length; i++){
+                if(max_nodes_weight[i] < min){
+                    min = max_nodes_weight[i];
+                    index = i;
+                }
             }
+            return this.graph.getNode(index);
         }
-        return this.graph.getNode(node_id);
+        else
+            return null;
     }
 
     @Override
@@ -427,13 +420,26 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     public boolean load (String file){
         try{
             DirectedWeightedGraph graph = new DWG(file);
-            DirectedWeightedGraphAlgorithms test = new DWGalgo();
-            test.init(graph);
+            this.init(graph);
             return true;
         } catch (IOException | ParseException e) {
             e.printStackTrace();
             e.printStackTrace();
             return false;
         }
+    }
+    /** This function loops through a given graph and return the highest NodeData key.
+     * Return: Integer. */
+    public static int find_Highest_Node(DirectedWeightedGraph graph){
+        //finding the highest Node ID.
+        int i, j;
+        int max_id = 0;
+        Iterator<NodeData> itr = graph.nodeIter();
+        while (itr.hasNext()) {
+            NodeData temp = itr.next();
+            if (temp.getKey() > max_id)
+                max_id = temp.getKey();
+        }
+        return max_id;
     }
 }
