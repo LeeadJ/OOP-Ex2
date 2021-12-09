@@ -1,5 +1,6 @@
 package Ex2;
 
+import Ex2.GUI.GuiFrame;
 import GUI.Window;
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
@@ -44,12 +45,13 @@ public class Ex2 {
     public static void runGUI(String json_file) throws IOException, ParseException {
         DirectedWeightedGraphAlgorithms alg = getGraphAlgo(json_file);
         // ****** Add your code here ******
-        Window window = new Window();
+        new GuiFrame(alg);
         // ********************************
     }
 
     public static void main(String[] args) throws IOException, ParseException {
-
-
+        getGraphAlgo(args[0]);
+        getGraph(args[0]);
+        runGUI(args[0]);
     }
 }
