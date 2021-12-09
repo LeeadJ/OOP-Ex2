@@ -220,7 +220,9 @@ public class GuiFrame extends JFrame implements ActionListener {
     //need to finish show on graph the center node
     private void center_find() {
         NodeData center_node = this.algorithm.center();
-
+        this.getContentPane().removeAll();
+        this.add(new center_panel(this.algorithm.getGraph(), center_node));
+        SwingUtilities.updateComponentTreeUI(this);
     }
 
     private void tsp_find() {
@@ -258,7 +260,9 @@ public class GuiFrame extends JFrame implements ActionListener {
         }
         //continue here...
         // ans_list (ArrayList<Nodedata>)
-        System.out.println(ans_list);
+        this.getContentPane().removeAll();
+        this.add(new tsp(ans_list, this.algorithm.getGraph()));
+        SwingUtilities.updateComponentTreeUI(this);
     }
 
     private void shortest_path() {
