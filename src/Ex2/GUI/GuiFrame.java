@@ -1,6 +1,7 @@
 package Ex2.GUI;
 
 import Ex2.DWG;
+import Ex2.DWGalgo;
 import Ex2.GNode;
 import Ex2.Point3D;
 import GUI.progress_bar;
@@ -24,12 +25,13 @@ public class GuiFrame extends JFrame implements ActionListener {
     MyPanel panel;
     G1Panel panel1;
     shortest_dist SPanel;
-    DirectedWeightedGraph refresh;
+    DirectedWeightedGraphAlgorithms refresh;
 
     public GuiFrame(DirectedWeightedGraphAlgorithms algo){
         super();
         this.algorithm = algo;
-        refresh = algo.copy();
+        this.refresh = new DWGalgo();
+        refresh.init(algo.copy());
         panel1 = new G1Panel(algorithm.getGraph());
 
         this.add(panel1);
@@ -198,8 +200,10 @@ public class GuiFrame extends JFrame implements ActionListener {
 
     private void refreshG(){
         this.getContentPane().removeAll();
-        this.add(new MyPanel(refresh));
+        this.add(new MyPanel(refresh.getGraph()));
         SwingUtilities.updateComponentTreeUI(this);
+        JPanel myPanel = new JPanel();
+        JOptionPane.showMessageDialog(myPanel, "Refresh Complete", "Refreshed page", JOptionPane.INFORMATION_MESSAGE );
     }
 
     //works...No need to touch
@@ -220,47 +224,64 @@ public class GuiFrame extends JFrame implements ActionListener {
         this.getContentPane().removeAll();
         this.add(new center_panel(this.algorithm.getGraph(), center_node));
         SwingUtilities.updateComponentTreeUI(this);
+        JPanel myPanel = new JPanel();
+        JOptionPane.showMessageDialog(myPanel, "The center is: " + center_node.getKey(), "", JOptionPane.INFORMATION_MESSAGE );
     }
 
     private void tsp_find() {
         ArrayList<NodeData> ans_list = new ArrayList<>();
-
+        int max_node = find_Highest_Node(this.algorithm.getGraph());
         JTextField nodeField = new JTextField(7);
 
         JPanel myPanel = new JPanel();
         myPanel.add(new JLabel("Node Key:"));
         myPanel.add(nodeField);
         int result = -99;
-        try {
             while (true) {
                 String[] arr = {"Ok", "Done", "Cancel"};
                 result = JOptionPane.showOptionDialog(null, myPanel,
                         "Please enter a Node. If finished press Done.", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, arr, 0);
-                if(result==-1) // the user pressed x.
+                if (result == -1) // the user pressed x.
                     break;
-                if(result==0){
+                if (result == 0) {
                     int key = Integer.parseInt(nodeField.getText());
-                    ans_list.add(this.algorithm.getGraph().getNode(key));
-                    nodeField.setText("");
+                    if (key < 0 || key > max_node) {
+                        JOptionPane.showMessageDialog(myPanel, "THE NODE DOES NOT EXIST!", "Warning", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        ans_list.add(this.algorithm.getGraph().getNode(key));
+                        nodeField.setText("");
+                    }
                     continue;
                 }
-                if(result==1) //the user pressed done
-                    break;
+                if (result == 1) {//the user pressed done
+                    if (!nodeField.getText().equals("")) {
+                        int key = Integer.parseInt(nodeField.getText());
+                        if (key < 0 || key > max_node) {
+                            JOptionPane.showMessageDialog(myPanel, "THE NODE DOES NOT EXIST!", "Warning", JOptionPane.WARNING_MESSAGE);
+                        } else {
+                            ans_list.add(this.algorithm.getGraph().getNode(key));
+                            nodeField.setText("");
+                        }
+                    }
+                break;
+                }
                 if(result==2) { //the user pressed cancel and wants to exit the panel.
                     myPanel.setVisible(false);
                     break;
                 }
             }
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            JOptionPane.showMessageDialog(myPanel, "THE NODE DOES NOT EXIST!", "Warning", JOptionPane.WARNING_MESSAGE);
-        }
         //continue here...
         // ans_list (ArrayList<Nodedata>)
-        this.getContentPane().removeAll();
-        this.add(new tsp(ans_list, this.algorithm.getGraph()));
-        SwingUtilities.updateComponentTreeUI(this);
-    }
+        if(!ans_list.isEmpty()) {
+            this.getContentPane().removeAll();
+            this.add(new tsp(ans_list, this.algorithm.getGraph()));
+            SwingUtilities.updateComponentTreeUI(this);
+        }
+        }
+
+
+
+
 
     private void shortest_path() {
         double ans_dist = 0.0;
@@ -304,7 +325,7 @@ public class GuiFrame extends JFrame implements ActionListener {
             this.getContentPane().removeAll();
             this.add(new shortest_dist(algorithm.getGraph(), ans_list, ans_dist ));
             SwingUtilities.updateComponentTreeUI(this);
-
+            JOptionPane.showMessageDialog(myPanel, "The shortest dist = " + ans_dist, "", JOptionPane.INFORMATION_MESSAGE );
         }
     }
 
@@ -343,7 +364,6 @@ public class GuiFrame extends JFrame implements ActionListener {
 
 
 
-    //checked and works---- remove from GUI
     private void remove_Edge() {
 
         JTextField srcField = new JTextField(7);
@@ -499,13 +519,26 @@ public class GuiFrame extends JFrame implements ActionListener {
     private void add_path_func(String file) throws IOException, ParseException {
         DirectedWeightedGraph graph = new DWG(file);
         algorithm.init(graph);
-        refresh = algorithm.copy();
+        refresh.init(algorithm.copy());
         this.getContentPane().removeAll();
         this.add(new MyPanel(algorithm.getGraph()));
         SwingUtilities.updateComponentTreeUI(this);
 
     }
-
+    /** This function loops through a given graph and return the highest NodeData key.
+     * Return: Integer. */
+    public static int find_Highest_Node(DirectedWeightedGraph graph){
+        //finding the highest Node ID.
+        int i, j;
+        int max_id = 0;
+        Iterator<NodeData> itr = graph.nodeIter();
+        while (itr.hasNext()) {
+            NodeData temp = itr.next();
+            if (temp.getKey() > max_id)
+                max_id = temp.getKey();
+        }
+        return max_id;
+    }
 
     public static void main(String[] args) throws IOException, ParseException {
         String g1 = "G1.json";
