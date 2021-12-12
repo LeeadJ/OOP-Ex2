@@ -145,14 +145,21 @@ public class DWG implements DirectedWeightedGraph {
     @Override
     public NodeData removeNode(int key) {
         NodeData temp = new GNode(this.nodeMap.get(key).getKey(), this.nodeMap.get(key).getLocation());
-        this.nodeMap.remove(key);
-        for(HashMap<Integer, EdgeData> map : this.edgeMap.values()){
-            for(EdgeData e : map.values()){
-                if(e.getDest() == key){
-                    map.remove(key);
+        for(NodeData n : this.nodeMap.values()){
+            System.out.println("\t\t\t Curr node: " + n);
+            for(int i = 0; i < this.edgeMap.get(n.getKey()).size(); i++){
+                try{
+                if(this.edgeMap.get(n.getKey()).get(i).getSrc() == key || this.edgeMap.get(n.getKey()).get(i).getDest() == key){
+                    System.out.println("Curr Edge: " + this.edgeMap.get(n.getKey()).get(i) );
+                    this.removeEdge(this.edgeMap.get(n.getKey()).get(i).getSrc(), this.edgeMap.get(n.getKey()).get(i).getDest());
+                    System.out.println("Removed edge: "+ this.edgeMap.get(n.getKey()).get(i));
                 }
             }
+                catch (NullPointerException ignored){
+                }
+                }
         }
+        this.nodeMap.remove(key);
         this.MC++;
         return temp;
     }

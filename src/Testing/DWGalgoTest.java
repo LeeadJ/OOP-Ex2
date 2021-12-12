@@ -59,19 +59,18 @@ class DWGalgoTest {
 
     @Test
     void copy() {
-        DirectedWeightedGraph g = new DWG();
-        DWGalgo test = new DWGalgo();
-        test.init(g);
-        test.getGraph().addNode(a);
-        test.getGraph().addNode(b);
-        test.getGraph().connect(0, 1, 1.0);
-        test.getGraph().connect(1, 0, 1.0);
-        DirectedWeightedGraph copyG = test.copy();
-        assertEquals(test.getGraph().getNode(0), a);
-        assertFalse(copyG.getNode(0) == a);
-        assertEquals(copyG.getNode(0).getKey(), a.getKey());
-        assertEquals(copyG.getEdge(0, 1).getSrc(), test.getGraph().getEdge(0, 1).getSrc());
-
+        DirectedWeightedGraphAlgorithms graph = new DWGalgo();
+        graph.load("G1.json");
+        DirectedWeightedGraph copyG = graph.copy();
+        assertEquals(graph.getGraph().nodeSize(), copyG.nodeSize());
+        assertEquals(graph.getGraph().edgeSize(), copyG.edgeSize());
+        graph.getGraph().removeNode(1);
+        assertNotSame(graph.getGraph().nodeSize(), copyG.nodeSize());
+//        assertFalse(copyG.getNode(0) == a);
+//        assertEquals(copyG.getNode(0).getKey(), a.getKey());
+//        assertEquals(copyG.getEdge(0, 1).getSrc(), test.getGraph().getEdge(0, 1).getSrc());
+//        test.getGraph().removeNode(0);
+//        assertNotSame(test.getGraph().nodeSize(), copyG.nodeSize());
     }
 
     @Test
