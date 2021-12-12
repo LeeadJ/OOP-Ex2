@@ -94,7 +94,6 @@ public class G1Panel extends JPanel {
         int[] ypoints = {y2, (int) ym, (int) yn};
 
         g.drawLine(x1, y1, x2, y2);
-//        g.fillPolygon(xpoints, ypoints, 3);
         g.drawPolygon(xpoints, ypoints, 3);
     }
 

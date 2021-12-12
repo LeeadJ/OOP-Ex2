@@ -24,12 +24,12 @@ public class GuiFrame extends JFrame implements ActionListener {
     MyPanel panel;
     G1Panel panel1;
     shortest_dist SPanel;
-    DirectedWeightedGraphAlgorithms refresh;
+    DirectedWeightedGraph refresh;
 
     public GuiFrame(DirectedWeightedGraphAlgorithms algo){
         super();
         this.algorithm = algo;
-        refresh = algo;
+        refresh = algo.copy();
         panel1 = new G1Panel(algorithm.getGraph());
 
         this.add(panel1);
@@ -39,7 +39,6 @@ public class GuiFrame extends JFrame implements ActionListener {
 
 
         this.setLayout(new FlowLayout());
-
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -157,9 +156,7 @@ public class GuiFrame extends JFrame implements ActionListener {
             String file = JOptionPane.showInputDialog("Please enter the new path in the box below.");
             try {
                 add_path_func(file);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            } catch (ParseException ex) {
+            } catch (IOException | ParseException ex) {
                 ex.printStackTrace();
             }
         }
@@ -201,7 +198,7 @@ public class GuiFrame extends JFrame implements ActionListener {
 
     private void refreshG(){
         this.getContentPane().removeAll();
-        this.add(new MyPanel(refresh.getGraph()));
+        this.add(new MyPanel(refresh));
         SwingUtilities.updateComponentTreeUI(this);
     }
 
@@ -502,13 +499,11 @@ public class GuiFrame extends JFrame implements ActionListener {
     private void add_path_func(String file) throws IOException, ParseException {
         DirectedWeightedGraph graph = new DWG(file);
         algorithm.init(graph);
-        refresh.init(graph);
+        refresh = algorithm.copy();
         this.getContentPane().removeAll();
         this.add(new MyPanel(algorithm.getGraph()));
         SwingUtilities.updateComponentTreeUI(this);
-//        repaint();
-//        GUI.progress_bar progress_bar = new progress_bar();
-//        frametest fr = new frametest(algorithm.getGraph());
+
     }
 
 
