@@ -4,6 +4,7 @@ import Ex2.DWG;
 import Ex2.Edge;
 import Ex2.GNode;
 import Ex2.Point3D;
+import api.DirectedWeightedGraph;
 import api.EdgeData;
 import api.NodeData;
 import org.json.simple.JSONObject;
@@ -99,25 +100,32 @@ class DWGTest {
     }
 
     @Test
-    void removeNode() {
-        assertEquals(0, dwg.nodeSize());
-        dwg.addNode(a);
-        assertEquals(dwg.getNode(a.getKey()), a);
-        dwg.removeNode(a.getKey());
-        assertEquals(0, dwg.nodeSize());
-        assertNull(dwg.getNode(a.getKey()));
+    void removeNode() throws IOException, ParseException {
+        DirectedWeightedGraph g2 = new DWG("G2.json");
+        g2.removeNode(16);
+
+//        assertEquals(0, dwg.nodeSize());
+//        dwg.addNode(a);
+//        assertEquals(dwg.getNode(a.getKey()), a);
+//        dwg.removeNode(a.getKey());
+//        assertEquals(0, dwg.nodeSize());
+//        assertNull(dwg.getNode(a.getKey()));
     }
 
     @Test
-    void removeEdge() {
-        assertEquals(0, dwg.edgeSize());
-        dwg.addNode(a);
-        dwg.addNode(c);
-        dwg.connect(a.getKey(), c.getKey(), 1.0);
-        assertEquals(1, dwg.edgeSize());
-        dwg.removeEdge(a.getKey(), c.getKey());
-        assertEquals(0, dwg.edgeSize());
-
+    void removeEdge() throws IOException, ParseException {
+        DirectedWeightedGraph g2 = new DWG("G1.json");
+        g2.removeNode(0);
+        assertEquals(33, g2.edgeSize());
+//        g2.removeEdge(16,15);
+//        assertEquals(35, g2.edgeSize());
+//        assertEquals(0, dwg.edgeSize());
+//        dwg.addNode(a);
+//        dwg.addNode(c);
+//        dwg.connect(a.getKey(), c.getKey(), 1.0);
+//        assertEquals(1, dwg.edgeSize());
+//        dwg.removeEdge(a.getKey(), c.getKey());
+//        assertEquals(0, dwg.edgeSize());
     }
 
     @Test

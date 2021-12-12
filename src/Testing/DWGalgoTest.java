@@ -39,11 +39,20 @@ class DWGalgoTest {
 
 
     @Test
-    void init() {
-        DirectedWeightedGraph g = new DWG();
+    void init() throws IOException, ParseException {
+        DirectedWeightedGraph g = new DWG("G1.json");
+        DirectedWeightedGraph g1 = new DWG("G2.json");
+        DirectedWeightedGraph g2 = new DWG("G3.json");
+        DirectedWeightedGraph g3 = new DWG("1000Nodes.json");
+        DirectedWeightedGraph g4 = new DWG("10000Nodes.json");
+        DirectedWeightedGraph g5 = new DWG("100000.json");
         DWGalgo test = new DWGalgo();
         test.init(g);
-        assertNull(g.getNode(0)); //if this works then the test.init works.
+        test.init(g1);
+        test.init(g2);
+        test.init(g3);
+        test.init(g4);
+        test.init(g5);
     }
 
     @Test
@@ -74,25 +83,19 @@ class DWGalgoTest {
     }
 
     @Test
-    void isConnected() {
-        DirectedWeightedGraph g = new DWG();
+    void isConnected() throws IOException, ParseException {
+        DirectedWeightedGraph g = new DWG("G1.json");
+//        DirectedWeightedGraph g1 = new DWG("G2.json");
+//        DirectedWeightedGraph g2 = new DWG("G3.json");
+//        DirectedWeightedGraph g3 = new DWG("1000Nodes.json");
+//        DirectedWeightedGraph g4 = new DWG("10000Nodes.json");
+//        DirectedWeightedGraph g5 = new DWG("100000.json");
         DWGalgo test = new DWGalgo();
         test.init(g);
-        test.getGraph().addNode(a);
-        test.getGraph().addNode(b);
-        test.getGraph().connect(0, 1, 1.0);
-        test.getGraph().connect(1, 0, 1.0);
-        assertTrue(test.isConnected());
-        DirectedWeightedGraph g1 = new DWG();
-        DWGalgo test1 = new DWGalgo();
-        test1.init(g1);
-        test1.getGraph().addNode(a);
-        test1.getGraph().addNode(b);
-        test1.getGraph().addNode(c);
-        test1.getGraph().connect(0, 1, 1.0);
-        test1.getGraph().connect(1, 0, 1.0);
-        test1.getGraph().connect(2, 0, 1.0);
-        assertFalse(test1.isConnected());
+        test.getGraph().removeNode(7);
+        test.getGraph().removeNode(10);
+        assertFalse(test.isConnected());
+
     }
 
     @Test
@@ -138,19 +141,25 @@ class DWGalgoTest {
 
     @Test
     void center() throws IOException, ParseException {
-        String g1 = "C:\\Users\\Leead\\IdeaProjects\\OOP-Ex2\\G1.json";
-        String g2 = "C:\\Users\\Leead\\IdeaProjects\\OOP-Ex2\\G2.json";
-        String g3 = "C:\\Users\\Leead\\IdeaProjects\\OOP-Ex2\\G3.json";
-        DirectedWeightedGraph g = new DWG(g1);
-        DirectedWeightedGraph gg = new DWG(g2);
-        DirectedWeightedGraph ggg = new DWG(g3);
+        DirectedWeightedGraph g = new DWG("G1.json");
+        DirectedWeightedGraph g1 = new DWG("G2.json");
+        DirectedWeightedGraph g2 = new DWG("G3.json");
+        DirectedWeightedGraph g3 = new DWG("1000Nodes.json");
+        DirectedWeightedGraph g4 = new DWG("10000Nodes.json");
+        DirectedWeightedGraph g5 = new DWG("100000.json");
         DWGalgo test = new DWGalgo();
         test.init(g);
-        assertEquals(test.center(), g.getNode(8));
-        test.init(gg);
-        assertEquals(test.center(), gg.getNode(0));
-        test.init(ggg);
-        assertEquals(test.center(), ggg.getNode(40));
+        System.out.println(test.center());
+        test.init(g1);
+        System.out.println(test.center());
+        test.init(g2);
+        System.out.println(test.center());
+        test.init(g3);
+        System.out.println(test.center());
+        test.init(g4);
+        System.out.println(test.center());
+        test.init(g5);
+        System.out.println(test.center());
     }
 
     @Test
@@ -182,23 +191,16 @@ class DWGalgoTest {
     }
 
     @Test
-    void save() {
-        DirectedWeightedGraph g = new DWG();
+    void save() throws IOException, ParseException {
+        DirectedWeightedGraph g = new DWG("G1.json");
         DWGalgo test = new DWGalgo();
         test.init(g);
-        test.getGraph().addNode(a);
-        test.getGraph().addNode(b);
-        test.getGraph().addNode(c);
-        test.getGraph().addNode(d);
-        test.getGraph().addNode(e);
-        test.getGraph().connect(0, 1, 3.0);
-        test.getGraph().connect(0, 3, 7.0);
-        test.getGraph().connect(1, 0, 8.0);
-        test.getGraph().connect(1, 2, 2.0);
-        test.getGraph().connect(2, 0, 5.0);
-        test.getGraph().connect(2, 3, 1.0);
-        test.getGraph().connect(3, 0, 2.0);
         assertTrue(test.save("json_array_output.json"));
+        DirectedWeightedGraph g1 = new DWG("json_array_output.json");
+        DWGalgo test1 = new DWGalgo();
+        test1.init(g1);
+        assertEquals(test.getGraph().edgeSize(), test1.getGraph().edgeSize());
+        assertEquals(test.getGraph().nodeSize(), test1.getGraph().nodeSize());
     }
 
     @Test
