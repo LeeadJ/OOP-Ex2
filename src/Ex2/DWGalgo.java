@@ -29,7 +29,6 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     }
 
     @Override
-    // testing pull with leead
     public DirectedWeightedGraph copy() {
         DirectedWeightedGraph copy_graph = new DWG();
         Iterator<NodeData> itr_node = this.graph.nodeIter();
@@ -37,11 +36,16 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
             NodeData temp_node = new GNode(itr_node.next());
             copy_graph.addNode(temp_node);
         }
-        Iterator<EdgeData> itr_edge = this.graph.edgeIter();
-        while(itr_edge.hasNext()) {
-            EdgeData temp_edge = new Edge(itr_edge.next());
-            copy_graph.connect(temp_edge.getSrc(), temp_edge.getDest(), temp_edge.getWeight());
+        Iterator<NodeData> itr = this.graph.nodeIter();
+        while(itr.hasNext()){
+            NodeData temp = itr.next();
+            Iterator<EdgeData> itr_edge = this.graph.edgeIter(temp.getKey());
+            while(itr_edge.hasNext()) {
+                EdgeData temp_edge = new Edge(itr_edge.next());
+                copy_graph.connect(temp_edge.getSrc(), temp_edge.getDest(), temp_edge.getWeight());
+            }
         }
+
         return copy_graph;
     }
 
