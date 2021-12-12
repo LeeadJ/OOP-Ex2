@@ -1,14 +1,12 @@
 package Ex2;
 
 import Ex2.GUI.GuiFrame;
+import GUI.Window;
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
-import api.EdgeData;
-import api.NodeData;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 /**
  * This class is the main class for Ex2.Ex2 - your implementation will be tested using this class.
@@ -52,10 +50,8 @@ public class Ex2 {
     }
 
     public static void main(String[] args) throws IOException, ParseException {
-        String g1 = "C:\\Users\\Leead\\IdeaProjects\\OOP-Ex2\\G1.json";
-        String g2 = "C:\\Users\\Leead\\IdeaProjects\\OOP-Ex2\\G2.json";
-        String g3 = "C:\\Users\\Leead\\IdeaProjects\\OOP-Ex2\\G3.json";
-
-        runGUI("G1.json");
+        getGraphAlgo(args[0]);
+        getGraph(args[0]);
+        runGUI(args[0]);
     }
 }

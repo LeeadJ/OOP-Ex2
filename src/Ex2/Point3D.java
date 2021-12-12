@@ -21,6 +21,7 @@ public class Point3D implements GeoLocation {
         this._z = other._z;
     }
 
+
     @Override
     // returning x value
     public double x() {

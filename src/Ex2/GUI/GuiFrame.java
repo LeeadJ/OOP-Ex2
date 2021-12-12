@@ -3,6 +3,7 @@ package Ex2.GUI;
 import Ex2.DWG;
 import Ex2.GNode;
 import Ex2.Point3D;
+import GUI.progress_bar;
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 import api.EdgeData;
@@ -20,15 +21,26 @@ import java.util.Iterator;
 
 public class GuiFrame extends JFrame implements ActionListener {
     private DirectedWeightedGraphAlgorithms algorithm;
-
-
+    MyPanel panel;
+    G1Panel panel1;
+    shortest_dist SPanel;
+    DirectedWeightedGraphAlgorithms refresh;
 
     public GuiFrame(DirectedWeightedGraphAlgorithms algo){
         super();
         this.algorithm = algo;
+        refresh = algo;
+        panel1 = new G1Panel(algorithm.getGraph());
+
+        this.add(panel1);
+
         initialize_frame_specs();
         initialize_menu_bar();
 
+
+        this.setLayout(new FlowLayout());
+
+        this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -57,7 +69,7 @@ public class GuiFrame extends JFrame implements ActionListener {
         help_button = new JMenu("Help");
 
         //initializing the Menu-buttons:
-        JMenuItem save, clean, load, edit, algo_actions, refresh_Graph;
+        JMenuItem save, clean, load, edit, algo_actions, refresh_graph;
         save = new JMenuItem("Save Graph");
         save.addActionListener(this);
         clean = new JMenuItem("Clean Graph");
@@ -66,8 +78,8 @@ public class GuiFrame extends JFrame implements ActionListener {
         load = new JMenu("Load Graph");
         edit = new JMenu("Edit Graph");
         algo_actions = new JMenu("Algorithms");
-
-
+        refresh_graph = new JMenuItem("Refresh Graph");
+        refresh_graph.addActionListener(this);
         // Load
         //initializing the 'Load" submenu options:
         JMenuItem add_path;
@@ -123,6 +135,7 @@ public class GuiFrame extends JFrame implements ActionListener {
         menu_button.add(save);
         menu_button.add(edit);
         menu_button.add(algo_actions);
+        menu_button.add(refresh_graph);
         menu_button.addSeparator();
         menu_button.add(clean);
 
@@ -177,7 +190,39 @@ public class GuiFrame extends JFrame implements ActionListener {
         if (str.equals("Travelling Salesman Problem")) {
             tsp_find();
         }
+        if(str.equals("Refresh Graph")){
+            refreshG();
+        }
+        if(str.equals("Clean Graph")){
+            this.getContentPane().removeAll();
+            this.repaint();
+        }
+    }
 
+    private void refreshG(){
+        this.getContentPane().removeAll();
+        this.add(new MyPanel(refresh.getGraph()));
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+
+    //works...No need to touch
+    private void is_connected() {
+        JPanel myPanel = new JPanel();
+        if(this.algorithm.isConnected()){
+            JOptionPane.showMessageDialog(myPanel, "The Graph is connected", "", JOptionPane.INFORMATION_MESSAGE );
+        }
+        else{
+            JOptionPane.showMessageDialog(myPanel, "The Graph is not connected", "", JOptionPane.INFORMATION_MESSAGE );
+        }
+
+    }
+
+    //need to finish show on graph the center node
+    private void center_find() {
+        NodeData center_node = this.algorithm.center();
+        this.getContentPane().removeAll();
+        this.add(new center_panel(this.algorithm.getGraph(), center_node));
+        SwingUtilities.updateComponentTreeUI(this);
     }
 
     private void tsp_find() {
@@ -215,28 +260,11 @@ public class GuiFrame extends JFrame implements ActionListener {
         }
         //continue here...
         // ans_list (ArrayList<Nodedata>)
-        System.out.println(ans_list);
+        this.getContentPane().removeAll();
+        this.add(new tsp(ans_list, this.algorithm.getGraph()));
+        SwingUtilities.updateComponentTreeUI(this);
     }
 
-    //need to finish.
-    private void center_find() {
-        NodeData center_node = this.algorithm.center();
-
-    }
-
-    //works...No need to touch
-    private void is_connected() {
-        JPanel myPanel = new JPanel();
-        if(this.algorithm.isConnected()){
-            JOptionPane.showMessageDialog(myPanel, "The Graph is connected", "", JOptionPane.INFORMATION_MESSAGE );
-        }
-        else{
-            JOptionPane.showMessageDialog(myPanel, "The Graph is not connected", "", JOptionPane.INFORMATION_MESSAGE );
-        }
-
-    }
-
-    //tested and works..
     private void shortest_path() {
         double ans_dist = 0.0;
         ArrayList<NodeData> ans_list = new ArrayList<>();
@@ -276,8 +304,10 @@ public class GuiFrame extends JFrame implements ActionListener {
             // If the user input was successful continue here.
             // ans_dist = (Double)
             // ans_list = (ArrayList<NodeData)
-            System.out.println("Dist: "+ans_dist);
-            System.out.println("List: "+ans_list);
+            this.getContentPane().removeAll();
+            this.add(new shortest_dist(algorithm.getGraph(), ans_list, ans_dist ));
+            SwingUtilities.updateComponentTreeUI(this);
+
         }
     }
 
@@ -294,28 +324,31 @@ public class GuiFrame extends JFrame implements ActionListener {
                 "Please enter the file name below", JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
-                boolean b = true;
-                while(b && result == JOptionPane.OK_OPTION){
-                    if(!fileField.getText().contains(".json")){
-                        JOptionPane.showMessageDialog(myPanel, "Need to add '.json'  at the end!", "Warning", JOptionPane.WARNING_MESSAGE);
-                        JOptionPane.showConfirmDialog(null, myPanel, "Please enter Node to be removed below", JOptionPane.OK_CANCEL_OPTION);
-                    }
-                    else if(fileField.getText().substring(0, fileField.getText().indexOf('.')).length()==0){
-                        JOptionPane.showMessageDialog(myPanel, "Need to add text before the '.json'!", "Warning", JOptionPane.WARNING_MESSAGE);
-                        JOptionPane.showConfirmDialog(null, myPanel, "Please enter Node to be removed below", JOptionPane.OK_CANCEL_OPTION);
-                    }
-                    else {
-                        JOptionPane.showMessageDialog(myPanel, "Save Complete", "", JOptionPane.INFORMATION_MESSAGE );
-                        path = fileField.getText();
-                        b = false;
-                    }
+            boolean b = true;
+            while(b && result == JOptionPane.OK_OPTION){
+                if(!fileField.getText().contains(".json")){
+                    JOptionPane.showMessageDialog(myPanel, "Need to add '.json'  at the end!", "Warning", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showConfirmDialog(null, myPanel, "Please enter Node to be removed below", JOptionPane.OK_CANCEL_OPTION);
                 }
+                else if(fileField.getText().substring(0, fileField.getText().indexOf('.')).length()==0){
+                    JOptionPane.showMessageDialog(myPanel, "Need to add text before the '.json'!", "Warning", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showConfirmDialog(null, myPanel, "Please enter Node to be removed below", JOptionPane.OK_CANCEL_OPTION);
+                }
+                else {
+                    JOptionPane.showMessageDialog(myPanel, "Save Complete", "", JOptionPane.INFORMATION_MESSAGE );
+                    path = fileField.getText();
+                    b = false;
+                }
+            }
         }
         this.algorithm.save(path);
     }
 
-    //checked and works----
+
+
+    //checked and works---- remove from GUI
     private void remove_Edge() {
+
         JTextField srcField = new JTextField(7);
         JTextField destField = new JTextField(7);
 
@@ -329,13 +362,14 @@ public class GuiFrame extends JFrame implements ActionListener {
                 "Please enter Edge Source and Destination to be removed below", JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
-            while (true) {
+            boolean b = true;
+            while (b) {
                 int src = Integer.parseInt(srcField.getText());
                 int dest = Integer.parseInt(destField.getText());
                 try {
                     this.algorithm.getGraph().removeEdge(src, dest);
                     JOptionPane.showMessageDialog(myPanel, "Delete Complete", "", JOptionPane.INFORMATION_MESSAGE );
-                    break;
+                    b = false;
                 }
                 catch (NullPointerException e) {
                     if(this.algorithm.getGraph().getNode(src)==null)
@@ -346,6 +380,9 @@ public class GuiFrame extends JFrame implements ActionListener {
                 }
             }
         }
+        this.getContentPane().removeAll();
+        this.add(new MyPanel(algorithm.getGraph()));
+        SwingUtilities.updateComponentTreeUI(this);
     }
 
     private void remove_Node() {
@@ -388,7 +425,11 @@ public class GuiFrame extends JFrame implements ActionListener {
 
             }
         }
+        this.getContentPane().removeAll();
+        this.add(new MyPanel(algorithm.getGraph()));
+        SwingUtilities.updateComponentTreeUI(this);
     }
+
 
     private void connect_Edge() {
         JTextField srcField = new JTextField(4);
@@ -409,9 +450,12 @@ public class GuiFrame extends JFrame implements ActionListener {
         int result = JOptionPane.showConfirmDialog(null, myPanel,
                 "Please add values to connect below", JOptionPane.OK_CANCEL_OPTION);
 
-            if (result == JOptionPane.OK_OPTION) {
-                    this.algorithm.getGraph().connect(Integer.parseInt(srcField.getText()), Integer.parseInt(destField.getText()), Double.parseDouble(weightField.getText()));
-            }
+        if (result == JOptionPane.OK_OPTION) {
+            this.algorithm.getGraph().connect(Integer.parseInt(srcField.getText()), Integer.parseInt(destField.getText()), Double.parseDouble(weightField.getText()));
+        }
+        this.getContentPane().removeAll();
+        this.add(new MyPanel(algorithm.getGraph()));
+        SwingUtilities.updateComponentTreeUI(this);
     }
 
     private void add_Node() {
@@ -450,18 +494,26 @@ public class GuiFrame extends JFrame implements ActionListener {
                 System.out.println("Enter the values properly!");
             }
         }
+        this.getContentPane().removeAll();
+        this.add(new MyPanel(algorithm.getGraph()));
+        SwingUtilities.updateComponentTreeUI(this);
     }
-
 
     private void add_path_func(String file) throws IOException, ParseException {
         DirectedWeightedGraph graph = new DWG(file);
         algorithm.init(graph);
-
+        refresh.init(graph);
+        this.getContentPane().removeAll();
+        this.add(new MyPanel(algorithm.getGraph()));
+        SwingUtilities.updateComponentTreeUI(this);
+//        repaint();
+//        GUI.progress_bar progress_bar = new progress_bar();
+//        frametest fr = new frametest(algorithm.getGraph());
     }
 
 
     public static void main(String[] args) throws IOException, ParseException {
-        String g1 = "C:\\Users\\Leead\\IdeaProjects\\OOP-Ex2\\G1.json";
+        String g1 = "G1.json";
         DirectedWeightedGraphAlgorithms algo = Ex2.Ex2.getGraphAlgo(g1);
         new GuiFrame(algo);
     }
