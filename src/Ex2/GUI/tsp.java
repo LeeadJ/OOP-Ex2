@@ -69,8 +69,11 @@ public class tsp extends JPanel {
 
         int x = (int) ((nList.get(nList.size()-1).getLocation().x() - minX) * scaleX);
         int y = (int) ((nList.get(nList.size()-1).getLocation().y() - minY) * scaleY);
-
-
+        g2d.fillOval(x, y, 20, 20);
+        g2d.setColor(Color.BLACK);
+        g2d.setFont(new Font("MV Boli", Font.BOLD, 13));
+        g2d.drawString("" + nList.get(nList.size()-1).getKey(), x, y + 35);
+        repaint();
     }
 
     /**
