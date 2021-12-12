@@ -47,22 +47,26 @@ public class MyPanel extends JPanel {
 
             Iterator<EdgeData> itr_edge = graph.edgeIter(node.getKey());
             while (itr_edge.hasNext()) {
-                EdgeData edge = itr_edge.next();
-                int srcX = (int) ((graph.getNode(edge.getSrc()).getLocation().x() - minX) * scaleX);
-                int srcY = (int) ((graph.getNode(edge.getSrc()).getLocation().y() - minY) * scaleY);
+                try {
+                    EdgeData edge = itr_edge.next();
+                    int srcX = (int) ((graph.getNode(edge.getSrc()).getLocation().x() - minX) * scaleX);
+                    int srcY = (int) ((graph.getNode(edge.getSrc()).getLocation().y() - minY) * scaleY);
 
-                int destX = (int) ((graph.getNode(edge.getDest()).getLocation().x() - minX) * scaleX);
-                int destY = (int) ((graph.getNode(edge.getDest()).getLocation().y() - minY) * scaleY);
+                    int destX = (int) ((graph.getNode(edge.getDest()).getLocation().x() - minX) * scaleX);
+                    int destY = (int) ((graph.getNode(edge.getDest()).getLocation().y() - minY) * scaleY);
 
-                g2d.setStroke(new BasicStroke(2));
-                g2d.setPaint(Color.BLUE);
-                drawArrowLine(g2d, srcX, srcY, destX, destY, 5, 5);
+                    g2d.setStroke(new BasicStroke(2));
+                    g2d.setPaint(Color.BLUE);
+                    drawArrowLine(g2d, srcX, srcY, destX, destY, 5, 5);
 
-                double edgeW = edge.getWeight();
-                String E = String.format("%.3f", edgeW);
-                g2d.setFont(new Font("MV Boli", Font.BOLD, 10));
-                g2d.drawString(E, (int) (srcX * 0.25 + destX * 0.75), (int) (srcY * .25 + destY * .75));
-                repaint();
+                    double edgeW = edge.getWeight();
+                    String E = String.format("%.3f", edgeW);
+                    g2d.setFont(new Font("MV Boli", Font.BOLD, 10));
+                    g2d.drawString(E, (int) (srcX * 0.25 + destX * 0.75), (int) (srcY * .25 + destY * .75));
+                    repaint();
+                }
+                catch (NullPointerException ignored){
+                }
             }
         }
     }
