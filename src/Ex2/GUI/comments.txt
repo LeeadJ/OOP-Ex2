@@ -1,0 +1,12 @@
+1) add labels to everything describing te fnal result.
+
+2) check bugs to user inputs.
+
+3) tsp - show last node inputted in the path.
+        - fix bug (node the doesnt exist).
+
+
+4) fix the refresh copy - deep copy.
+
+5)
+
