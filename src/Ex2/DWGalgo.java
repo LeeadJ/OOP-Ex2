@@ -121,10 +121,10 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
      * Return: Double. */
     private double find_shortestPathDist(int src, int dest, DirectedWeightedGraph graph) {
         double[][] node_matrix = matrix_initializer(graph);
-        System.out.println("Starting array: "+Arrays.deepToString(node_matrix));
+//        System.out.println("Starting array: "+Arrays.deepToString(node_matrix));
         int[][] stam = next_matrix_initializer(node_matrix);
         warshall(node_matrix, stam);
-        System.out.println("Final array: "+Arrays.deepToString(node_matrix));
+//        System.out.println("Final array: "+Arrays.deepToString(node_matrix));
         return node_matrix[src][dest];
     }
 
@@ -282,9 +282,9 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     @Override
     public List<NodeData> tsp (List < NodeData > cities) {
         double[][] matrix = matrix_tsp_initializer(this.graph, cities);
-        System.out.println("Original Matrix: "+Arrays.deepToString(matrix));
+//        System.out.println("Original Matrix: "+Arrays.deepToString(matrix));
         warshall_tsp(matrix);
-        System.out.println("Cleanes Matrix: "+Arrays.deepToString(matrix));
+//        System.out.println("Cleanes Matrix: "+Arrays.deepToString(matrix));
         int len = matrix.length;
         boolean[] visted = new boolean[len];
         double ans = Double.MAX_VALUE;
@@ -294,15 +294,15 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
         ArrayList<Integer> arr = new ArrayList<>();
         arr.add(0);
         ans = tsp_helper(matrix, visted, 0, len, 1, 0.0, ans, loop_count, arr);
-        System.out.println(ans);
+//        System.out.println(ans);
         arr.add(0);
-        System.out.println(arr);
+//        System.out.println(arr);
         List<NodeData> arr_final = new ArrayList<>();
         for(int i : arr){
             arr_final.add(cities.get(i));
         }
-        System.out.println(arr_final);
-        return null;
+//        System.out.println(arr_final);
+        return arr_final;
     }
 
     /** This function recursively computes the tsp.

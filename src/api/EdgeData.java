@@ -10,7 +10,7 @@ public interface EdgeData {
 	 * The id of the source node of this edge.
 	 * @return
 	 */
-	public int getSrc();
+public int getSrc();
 	/**
 	 * The id of the destination node of this edge
 	 * @return
