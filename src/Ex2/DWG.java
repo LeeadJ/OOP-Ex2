@@ -126,7 +126,7 @@ public class DWG implements DirectedWeightedGraph {
         }
     }
 
-    //////////////////////////////////ADD EXCEPTIONS///////////////////////////////////////////////////
+
     @Override
     public Iterator<NodeData> nodeIter() {
         return new NodeIterator();
@@ -146,13 +146,13 @@ public class DWG implements DirectedWeightedGraph {
     public NodeData removeNode(int key) {
         NodeData temp = new GNode(this.nodeMap.get(key).getKey(), this.nodeMap.get(key).getLocation());
         for(NodeData n : this.nodeMap.values()){
-            System.out.println("\t\t\t Curr node: " + n);
+
             for(int i = 0; i < this.edgeMap.get(n.getKey()).size(); i++){
                 try{
                 if(this.edgeMap.get(n.getKey()).get(i).getSrc() == key || this.edgeMap.get(n.getKey()).get(i).getDest() == key){
-                    System.out.println("Curr Edge: " + this.edgeMap.get(n.getKey()).get(i) );
+
                     this.removeEdge(this.edgeMap.get(n.getKey()).get(i).getSrc(), this.edgeMap.get(n.getKey()).get(i).getDest());
-                    System.out.println("Removed edge: "+ this.edgeMap.get(n.getKey()).get(i));
+
                 }
             }
                 catch (NullPointerException ignored){
