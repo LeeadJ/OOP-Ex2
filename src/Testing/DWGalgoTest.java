@@ -28,14 +28,6 @@ class DWGalgoTest {
     NodeData d = new GNode(3, p4);
     NodeData e = new GNode(4, p5);
 
-    EdgeData e1 = new Edge(0, 1.0, 3);
-    EdgeData e2 = new Edge(0, 2.0, 2);
-    EdgeData e3 = new Edge(0, 2.0, 1);
-    EdgeData e4 = new Edge(0, 2.0, 4);
-    EdgeData e5 = new Edge(1, 3.5, 2);
-    EdgeData e6 = new Edge(1, 3.5, 3);
-    EdgeData e7 = new Edge(1, 3.5, 4);
-    EdgeData e8 = new Edge(1, 3.5, 0);
 
 
     @Test
@@ -75,27 +67,58 @@ class DWGalgoTest {
         assertEquals(graph.getGraph().edgeSize(), copyG.edgeSize());
         graph.getGraph().removeNode(1);
         assertNotSame(graph.getGraph().nodeSize(), copyG.nodeSize());
-//        assertFalse(copyG.getNode(0) == a);
-//        assertEquals(copyG.getNode(0).getKey(), a.getKey());
-//        assertEquals(copyG.getEdge(0, 1).getSrc(), test.getGraph().getEdge(0, 1).getSrc());
-//        test.getGraph().removeNode(0);
-//        assertNotSame(test.getGraph().nodeSize(), copyG.nodeSize());
     }
 
     @Test
     void isConnected() throws IOException, ParseException {
         DirectedWeightedGraph g = new DWG("G1.json");
-//        DirectedWeightedGraph g1 = new DWG("G2.json");
-//        DirectedWeightedGraph g2 = new DWG("G3.json");
-//        DirectedWeightedGraph g3 = new DWG("1000Nodes.json");
-//        DirectedWeightedGraph g4 = new DWG("10000Nodes.json");
-//        DirectedWeightedGraph g5 = new DWG("100000.json");
+        DirectedWeightedGraph g1 = new DWG("G2.json");
+        DirectedWeightedGraph g2 = new DWG("G3.json");
+        DirectedWeightedGraph g3 = new DWG("1000Nodes.json");
+        DirectedWeightedGraph g4 = new DWG("10000Nodes.json");
+        DirectedWeightedGraph g5 = new DWG("100000.json");
         DWGalgo test = new DWGalgo();
+        DWGalgo test1 = new DWGalgo();
+        DWGalgo test2 = new DWGalgo();
+        DWGalgo test3 = new DWGalgo();
+        DWGalgo test4 = new DWGalgo();
+        DWGalgo test5 = new DWGalgo();
         test.init(g);
-        test.getGraph().removeNode(7);
-        test.getGraph().removeNode(10);
-        assertFalse(test.isConnected());
-
+        test1.init(g1);
+        test2.init(g2);
+        test3.init(g3);
+        test4.init(g4);
+        test5.init(g5);
+        long startTime = System.nanoTime();
+        assertTrue(test.isConnected());
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        System.out.println("G1 is connected time: " +duration/60000000.0);
+        startTime = System.nanoTime();
+        assertTrue(test1.isConnected());
+         endTime = System.nanoTime();
+         duration = (endTime - startTime);
+        System.out.println("G2 is connected time: " +duration/60000000.0);
+         startTime = System.nanoTime();
+        assertTrue(test2.isConnected());
+         endTime = System.nanoTime();
+         duration = (endTime - startTime);
+        System.out.println("G3 is connected time: " +duration/60000000.0);
+         startTime = System.nanoTime();
+        assertTrue(test3.isConnected());
+         endTime = System.nanoTime();
+         duration = (endTime - startTime);
+        System.out.println("1000Nodes is connected time: " +duration/60000000.0);
+         startTime = System.nanoTime();
+        assertTrue(test4.isConnected());
+         endTime = System.nanoTime();
+         duration = (endTime - startTime);
+        System.out.println("10000 Nodes is connected time: " +duration/60000000.0);
+         startTime = System.nanoTime();
+        assertTrue(test5.isConnected());
+         endTime = System.nanoTime();
+         duration = (endTime - startTime);
+        System.out.println("100000 Nodes is connected time: " +duration/60000000.0);
     }
 
     @Test
@@ -148,18 +171,42 @@ class DWGalgoTest {
         DirectedWeightedGraph g4 = new DWG("10000Nodes.json");
         DirectedWeightedGraph g5 = new DWG("100000.json");
         DWGalgo test = new DWGalgo();
+        DWGalgo test1 = new DWGalgo();
+        DWGalgo test2 = new DWGalgo();
+        DWGalgo test3 = new DWGalgo();
+        DWGalgo test4 = new DWGalgo();
+        DWGalgo test5 = new DWGalgo();
         test.init(g);
-        System.out.println(test.center());
-        test.init(g1);
-        System.out.println(test.center());
-        test.init(g2);
-        System.out.println(test.center());
-        test.init(g3);
-        System.out.println(test.center());
-        test.init(g4);
-        System.out.println(test.center());
-        test.init(g5);
-        System.out.println(test.center());
+        test1.init(g1);
+        test2.init(g2);
+        test3.init(g3);
+        test4.init(g4);
+        test5.init(g5);
+        long startTime = System.nanoTime();
+        int x = test.center().getKey();
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        System.out.println("G1 center it : "+ x + " Time duration: " + duration/1000000000.0);
+        startTime = System.nanoTime();
+        x = test1.center().getKey();
+        endTime = System.nanoTime();
+        duration = (endTime - startTime);
+        System.out.println("G2 center it : "+ x + " Time duration: " + duration/1000000000.0);
+        startTime = System.nanoTime();
+        x = test2.center().getKey();
+        endTime = System.nanoTime();
+        duration = (endTime - startTime);
+        System.out.println("G3 center it : "+ x + " Time duration: " + duration/1000000000.0);
+        startTime = System.nanoTime();
+        x = test3.center().getKey();
+        endTime = System.nanoTime();
+        duration = (endTime - startTime);
+        System.out.println("1000 Nodes center it : "+ x + " Time duration: " + duration/1000000000.0);
+        startTime = System.nanoTime();
+        x = test4.center().getKey();
+        endTime = System.nanoTime();
+        duration = (endTime - startTime);
+        System.out.println("10000 Nodes center it : "+ x + " Time duration: " + duration/1000000000.0);
     }
 
     @Test
@@ -205,10 +252,6 @@ class DWGalgoTest {
 
     @Test
     void load() throws IOException, ParseException {
-//        String path = "C:\\Users\\Leead\\IdeaProjects\\OOP-Ex2\\G3.json";
-//        DirectedWeightedGraphAlgorithms test = new DWGalgo();
-//        assertTrue(test.load(path));
-
         String file = "json_array_output.json";
         DirectedWeightedGraphAlgorithms test1 = new DWGalgo();
         assertTrue(test1.load(file));
