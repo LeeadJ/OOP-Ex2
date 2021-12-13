@@ -53,16 +53,18 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     @Override
     public boolean isConnected() {
         ArrayList<NodeData> Nlist = new ArrayList<>();
+        HashMap<Integer, Integer> nodeMap = new HashMap<>();
         int nodes = 0;
         Iterator<NodeData> itr_node = this.graph.nodeIter();
         while(itr_node.hasNext()){
             NodeData Temp = itr_node.next();
-            nodes++;
+            nodeMap.put(Temp.getKey(), nodes);
             Nlist.add(Temp);
+            nodes++;
         }
         boolean[] visited = new boolean[nodes];
         for(int i = 0; i< nodes; i++){
-            DFS(this.graph, i, visited, Nlist);
+            DFS(this.graph, i, visited, Nlist, nodeMap);
             for (boolean b: visited)
             {
                 if (!b) {
@@ -76,7 +78,7 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
 
     /**This function performs DFS traversal on a graph.
      * Return: VOID. */
-    void DFS(DirectedWeightedGraph graph, int v, boolean[] visited, ArrayList<NodeData> Nlist ) {
+    void DFS(DirectedWeightedGraph graph, int v, boolean[] visited, ArrayList<NodeData> Nlist, HashMap<Integer, Integer>nodeMap ) {
 
 
         // Create a stack for DFS
@@ -102,11 +104,7 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
 
                 while (itr_edge.hasNext()) {
                     EdgeData e = itr_edge.next();
-                    int edge = e.getDest();
-                    for (NodeData nodeData : Nlist) {
-                        if (nodeData.getKey() == edge)
-                            edge = Nlist.indexOf(nodeData);
-                    }
+                    int edge = nodeMap.get(e.getDest());
                     if (!visited[edge])
                         stack.push(Nlist.get(edge));
                 }
@@ -285,9 +283,7 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     @Override
     public List<NodeData> tsp (List < NodeData > cities) {
         double[][] matrix = matrix_tsp_initializer(this.graph, cities);
-        System.out.println("Original Matrix: "+Arrays.deepToString(matrix));
         warshall_tsp(matrix);
-        System.out.println("Cleanes Matrix: "+Arrays.deepToString(matrix));
         int len = matrix.length;
         boolean[] visted = new boolean[len];
         double ans = Double.MAX_VALUE;
@@ -297,15 +293,12 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
         ArrayList<Integer> arr = new ArrayList<>();
         arr.add(0);
         ans = tsp_helper(matrix, visted, 0, len, 1, 0.0, ans, loop_count, arr);
-        System.out.println(ans);
         arr.add(0);
-        System.out.println(arr);
         List<NodeData> arr_final = new ArrayList<>();
         for(int i : arr){
             arr_final.add(cities.get(i));
         }
-        System.out.println(arr_final);
-        return null;
+        return arr_final;
     }
 
     /** This function recursively computes the tsp.
