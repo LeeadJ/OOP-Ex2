@@ -101,8 +101,9 @@ This is Graph 2 for example:
 ## Running the programme <br />
 
 1. Download The project [github repo](https://github.com/Arieh-code/OOP-Ex2.git) . <br />
-2. Run terminal through the directory <br />
-3. Write this line in the CMD: <br />
+2. Make sure you have the jar file [Jar file](https://github.com/Arieh-code/OOP-Ex2). <br />  
+3. Run terminal through the directory <br />
+4. Write this line in the CMD: <br />
 > java -jar OOP-Ex2.jar <file_name>.json
 
 ![cmd](https://user-images.githubusercontent.com/68643157/145788844-b47eff6a-f2c2-4f59-b2b5-1c91b3d71247.png)<br />
