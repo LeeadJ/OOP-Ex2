@@ -52,15 +52,19 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public boolean isConnected() {
+        ArrayList<NodeData> Nlist = new ArrayList<>();
+        HashMap<Integer, Integer> nodeMap = new HashMap<>();
         int nodes = 0;
         Iterator<NodeData> itr_node = this.graph.nodeIter();
         while(itr_node.hasNext()){
-            itr_node.next();
+            NodeData Temp = itr_node.next();
+            nodeMap.put(Temp.getKey(), nodes);
+            Nlist.add(Temp);
             nodes++;
         }
         boolean[] visited = new boolean[nodes];
         for(int i = 0; i< nodes; i++){
-            DFS(this.graph, i, visited);
+            DFS(this.graph, i, visited, Nlist, nodeMap);
             for (boolean b: visited)
             {
                 if (!b) {
@@ -72,45 +76,38 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     }
 
 
-    /**This function performs DFS traversal on the graph on a graph.
+    /**This function performs DFS traversal on a graph.
      * Return: VOID. */
-    void DFS(DirectedWeightedGraph graph, int v, boolean[] visited )
-    {
+    void DFS(DirectedWeightedGraph graph, int v, boolean[] visited, ArrayList<NodeData> Nlist, HashMap<Integer, Integer>nodeMap ) {
 
 
         // Create a stack for DFS
         Stack<NodeData> stack = new Stack<>();
 
         // Push the current source node
-        stack.push(graph.getNode(v));
+        stack.push(Nlist.get(v));
 
-        while(!stack.empty())
-        {
-            // Pop a vertex from stack and print it
-            v = stack.peek().getKey();
-            stack.pop();
+        while (!stack.empty()) {
+                // Pop a vertex from stack and print it
+                v = Nlist.indexOf(stack.peek());
+                stack.pop();
 
-            // Stack may contain same vertex twice. So
-            // we need to print the popped item only
-            // if it is not visited.
-            if(!visited[v])
-            {
-                visited[v] = true;
-            }
+                // Stack may contain same vertex twice.
+                if (!visited[v]) {
+                    visited[v] = true;
+                }
 
-            // Get all adjacent vertices of the popped vertex s
-            // If a adjacent has not been visited, then push it
-            // to the stack.
-            Iterator<EdgeData> itr_edge = graph.edgeIter(v);
+                // Get all adjacent vertices of the popped vertex s
+                // If a adjacent has not been visited, then push it
+                // to the stack.
+                Iterator<EdgeData> itr_edge = graph.edgeIter(Nlist.get(v).getKey());
 
-            while (itr_edge.hasNext())
-            {
-                EdgeData e = itr_edge.next();
-                int edge = e.getDest();
-                if(!visited[edge])
-                    stack.push(graph.getNode(edge));
-            }
-
+                while (itr_edge.hasNext()) {
+                    EdgeData e = itr_edge.next();
+                    int edge = nodeMap.get(e.getDest());
+                    if (!visited[edge])
+                        stack.push(Nlist.get(edge));
+                }
         }
     }
 
@@ -125,10 +122,10 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
      * Return: Double. */
     private double find_shortestPathDist(int src, int dest, DirectedWeightedGraph graph) {
         double[][] node_matrix = matrix_initializer(graph);
-//        System.out.println("Starting array: "+Arrays.deepToString(node_matrix));
+        System.out.println("Starting array: "+Arrays.deepToString(node_matrix));
         int[][] stam = next_matrix_initializer(node_matrix);
         warshall(node_matrix, stam);
-//        System.out.println("Final array: "+Arrays.deepToString(node_matrix));
+        System.out.println("Final array: "+Arrays.deepToString(node_matrix));
         return node_matrix[src][dest];
     }
 
@@ -286,9 +283,7 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
     @Override
     public List<NodeData> tsp (List < NodeData > cities) {
         double[][] matrix = matrix_tsp_initializer(this.graph, cities);
-//        System.out.println("Original Matrix: "+Arrays.deepToString(matrix));
         warshall_tsp(matrix);
-//        System.out.println("Cleanes Matrix: "+Arrays.deepToString(matrix));
         int len = matrix.length;
         boolean[] visted = new boolean[len];
         double ans = Double.MAX_VALUE;
@@ -298,14 +293,11 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
         ArrayList<Integer> arr = new ArrayList<>();
         arr.add(0);
         ans = tsp_helper(matrix, visted, 0, len, 1, 0.0, ans, loop_count, arr);
-//        System.out.println(ans);
         arr.add(0);
-//        System.out.println(arr);
         List<NodeData> arr_final = new ArrayList<>();
         for(int i : arr){
             arr_final.add(cities.get(i));
         }
-//        System.out.println(arr_final);
         return arr_final;
     }
 
@@ -418,14 +410,17 @@ public class DWGalgo implements DirectedWeightedGraphAlgorithms {
         top.put("Edges", edge_arr);
         JSONArray node_arr = new JSONArray();
         top.put("Nodes", node_arr);
-        Iterator<EdgeData> itr_edge = this.graph.edgeIter();
-        while (itr_edge.hasNext()) {
-            EdgeData temp = itr_edge.next();
-            JSONObject edge_obj = new JSONObject();
-            edge_obj.put("src", temp.getSrc());
-            edge_obj.put("w", temp.getWeight());
-            edge_obj.put("dest", temp.getDest());
-            edge_arr.add(edge_obj);
+        Iterator<NodeData> itr_nodeForEdge = this.graph.nodeIter();
+        while(itr_nodeForEdge.hasNext()) {
+            Iterator<EdgeData> itr_edge = this.graph.edgeIter(itr_nodeForEdge.next().getKey());
+            while (itr_edge.hasNext()) {
+                EdgeData temp = itr_edge.next();
+                JSONObject edge_obj = new JSONObject();
+                edge_obj.put("src", temp.getSrc());
+                edge_obj.put("w", temp.getWeight());
+                edge_obj.put("dest", temp.getDest());
+                edge_arr.add(edge_obj);
+            }
         }
         Iterator<NodeData> itr_nodes = this.graph.nodeIter();
         while (itr_nodes.hasNext()) {

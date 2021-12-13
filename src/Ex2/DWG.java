@@ -126,7 +126,7 @@ public class DWG implements DirectedWeightedGraph {
         }
     }
 
-    //////////////////////////////////ADD EXCEPTIONS///////////////////////////////////////////////////
+
     @Override
     public Iterator<NodeData> nodeIter() {
         return new NodeIterator();
@@ -144,25 +144,27 @@ public class DWG implements DirectedWeightedGraph {
 
     @Override
     public NodeData removeNode(int key) {
+        int size = find_Highest_Node(this);
         NodeData temp = new GNode(this.nodeMap.get(key).getKey(), this.nodeMap.get(key).getLocation());
-        for(NodeData n : this.nodeMap.values()){
-            System.out.println("\t\t\t Curr node: " + n);
-            for(int i = 0; i < this.edgeMap.get(n.getKey()).size(); i++){
+        this.edgeMap.remove(key);
+        this.nodeMap.remove(key);
+        for (NodeData n : this.nodeMap.values()) {
+            for(int i = 0; i < size; i++){
                 try{
-                if(this.edgeMap.get(n.getKey()).get(i).getSrc() == key || this.edgeMap.get(n.getKey()).get(i).getDest() == key){
-                    System.out.println("Curr Edge: " + this.edgeMap.get(n.getKey()).get(i) );
-                    this.removeEdge(this.edgeMap.get(n.getKey()).get(i).getSrc(), this.edgeMap.get(n.getKey()).get(i).getDest());
-                    System.out.println("Removed edge: "+ this.edgeMap.get(n.getKey()).get(i));
+                    EdgeData temp_edge = this.edgeMap.get(n.getKey()).get(i);
+                if(temp_edge.getDest() == key){
+                    this.removeEdge(temp_edge.getSrc(), temp_edge.getDest());
                 }
             }
                 catch (NullPointerException ignored){
                 }
                 }
         }
-        this.nodeMap.remove(key);
+//        this.nodeMap.remove(key);
         this.MC++;
         return temp;
-    }
+        }
+
 
     @Override
     public EdgeData removeEdge(int src, int dest) {
@@ -188,6 +190,20 @@ public class DWG implements DirectedWeightedGraph {
     @Override
     public int getMC() {
         return this.MC;
+    }
+    /** This function loops through a given graph and return the highest NodeData key.
+     * Return: Integer. */
+    public static int find_Highest_Node(DirectedWeightedGraph graph){
+        //finding the highest Node ID.
+        int i, j;
+        int max_id = 0;
+        Iterator<NodeData> itr = graph.nodeIter();
+        while (itr.hasNext()) {
+            NodeData temp = itr.next();
+            if (temp.getKey() > max_id)
+                max_id = temp.getKey();
+        }
+        return max_id;
     }
 
     private class NodeIterator implements Iterator<NodeData>{
